@@ -1,6 +1,11 @@
 @font-face {
-	font-family: 'Regular';
-	src: url('font/DISTInking-Regular.otf') format('opentype');
+	font-family: 'Ferrum';
+	src: url('font/Ferrum-wy99.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'Goudy';
+	src: url('font/GoudyStMCC_Italic.otf') format('opentype');
 }
 
 @font-face {
