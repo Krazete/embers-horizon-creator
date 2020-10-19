@@ -1,0 +1,598 @@
+@font-face {
+	font-family: 'Regular';
+	src: url('font/DISTInking-Regular.otf') format('opentype');
+}
+
+@font-face {
+	font-family: 'Rodeo';
+	src: url('font/RODEK___.TTF') format('truetype');
+}
+
+body {
+	background: #585955;
+}
+
+input[type='radio'], input[type='checkbox'], .hidden {
+	display: none;
+}
+
+#creator {
+	float: left;
+	padding: 10px;
+}
+
+/* Types */
+
+#types {
+	font-family: 'Regular';
+	font-size: 25px;
+}
+
+#types label {
+	background: gray;
+	padding: 10px;
+	border-radius: 10px 10px 0 0;
+	cursor: pointer;
+}
+#types input:checked + label {
+	background: black;
+	color: white;
+}
+
+/* Card */
+
+#card {
+	float: left;
+    position: relative;
+    width: 756px;
+	height: 1134px;
+	transform-origin: left top;
+	border: 10px solid black;
+	border-radius: 10px;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#card input[type='text'] {
+	background: none;
+	padding: 0;
+	border: none;
+	outline: none;
+}
+
+#card-bg {
+	position: absolute;
+    width: 756px;
+	height: 1134px;
+	left: 0;
+	top: 0;
+}
+
+/* Card Art */
+
+#card-art-controller {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	cursor: move;
+}
+
+#card-art {
+	position: absolute;
+	width: 756px;
+	left: 378px;
+	top: 567px;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+#card-art.pixel {
+	image-rendering: crisp-edges;
+	image-rendering: pixelated;
+}
+
+#circle {
+	box-shadow: 0 0 5px 5px black;
+	position: absolute;
+    border: 5px solid white;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+#circle:after {
+	content: '';
+	box-shadow: inset 0 0 5px 5px black;
+	width: 100%;
+	height: 100%;
+	display: block;
+	border-radius: 50%;
+}
+
+/* Card Name */
+
+#card-name-bg {
+	position: absolute;
+    left: 18px;
+    top: 40px;
+    width: 720px;
+	height: 120px;
+	pointer-events: none;
+}
+
+#card-name {
+    color: transparent;
+    font-family: 'Regular';
+	font-size: 56px;
+    text-align: center;
+    position: absolute;
+    top: 66px;
+    width: 100%;
+}
+#card-name:focus {
+    color: white;
+}
+
+#card-name-canvas {
+	position: absolute;
+	top: 66px;
+	width: 100%;
+	pointer-events: none;
+}
+
+/* Card Infobox */
+
+#card-info-bg {
+	position: absolute;
+	bottom: 0;
+	width: 436px;
+	height: 981px;
+	pointer-events: none;
+}
+.char #card-info-bg,
+.dragon #card-info-bg,
+.agon #card-info-bg {
+	left: 0;
+}
+.armor #card-info-bg {
+	right: 0;
+}
+
+#card-info {
+    position: absolute;
+}
+.char #card-info,
+.dragon #card-info {
+	left: 92px;
+	top: 265px;
+}
+.armor #card-info {
+	left: 408px;
+	top: 238px;
+}
+.agon #card-info {
+	left: 80px;
+	top: 241px;
+}
+
+#card-info input[type='text'] {
+	font-size: 22px;
+}
+
+/* Infobox Armor Type */
+
+#info-type {
+	font-family: 'Regular';
+	color: red;
+	position: absolute;
+	left: 64px;
+}
+.char #info-type,
+.dragon #info-type,
+.agon #info-type {
+	display: none;
+}
+
+/* Infobox Stats */
+
+#info-stat {
+    position: absolute;
+}
+.char #info-stat,
+.dragon #info-stat {
+	left: 34px;
+}
+.armor #info-stat {
+	left: 45px;
+	top: 56px;
+}
+.agon #info-stat {
+	left: 35px;
+}
+.char #info-stat > div:nth-last-child(2),
+.char #info-stat > div:last-child,
+.dragon #info-stat > div:nth-last-child(2),
+.dragon #info-stat > div:last-child,
+.armor #info-stat > div:nth-last-child(2),
+.armor #info-stat > div:last-child {
+	display: none;
+}
+
+#info-stat-armor {
+	position: absolute;
+	left: 125px;
+	top: 170px;
+}
+.char #info-stat-armor,
+.dragon #info-stat-armor,
+.agon #info-stat-armor {
+	display: none;
+}
+
+#card-info .bubble {
+	float: left;
+    display: block;
+	padding: 6px 2px 6px 2px;
+	cursor: pointer;
+}
+#card-info .bubble:first-child {
+	clear: left;
+}
+#card-info .bubble:after {
+	content: '';
+	display: block;
+	width: 16px;
+	height: 16px;
+	box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 50%;
+}
+#card-info .bubble.checked:after {
+	background: black;
+}
+@media (pointer: fine) {
+	#card input[type='text']:hover {
+		outline: 1px dashed gray;
+	}
+	#card input[type='text']:focus {
+		outline: none;
+	}
+	#card .bubble.prospective:after {
+		box-shadow: inset 0 0 6px black;
+	}
+	#card .bubble.checked.prospective:after {
+		background: gray;
+	}
+}
+
+/* Infobox Moves */
+
+#info-moves {
+	position: relative;
+	white-space: nowrap;
+}
+.char #info-moves,
+.dragon #info-moves {
+	margin-top: 186px;
+}
+.armor #info-moves {
+	margin-top: 311px;
+}
+.agon #info-moves {
+	margin-top: 230px;
+}
+
+#info-moves > div {
+	margin-bottom: 8px;
+}
+.char #info-moves > div,
+.dragon #info-moves > div {
+	height: 65px;
+}
+.armor #info-moves > div {
+	height: 68px;
+}
+.agon #info-moves > div {
+	height: 67px;
+}
+.char #info-moves > div:nth-child(6),
+.dragon #info-moves > div:nth-child(6),
+.agon #info-moves > div:nth-child(6) {
+	visibility: hidden;
+}
+.armor #info-moves > div:nth-child(7),
+.armor #info-moves > div:last-child {
+	display: none;
+}
+
+.move-name {
+	font-family: 'Regular';
+	width: 288px;
+	display: block;
+}
+
+.move-pa {
+	clear: left;
+	width: 52px;
+	font-family: 'Rodeo';
+}
+
+.move-bonus {
+	font-family: 'Rodeo';
+	color: red;
+}
+
+/* Infobox Symbols */
+
+.move-icons {
+	min-width: 20px;
+	height: 20px;
+	vertical-align: text-bottom;
+	display: inline-block;
+	margin: 5px;
+	cursor: pointer;
+}
+.move-icons:empty {
+	outline: 1px dashed gray;
+}
+
+.move-icons img {
+	max-width: 20px;
+	max-height: 20px;
+	margin: 0 2px;
+}
+.move-icons.target img {
+	outline: 1px dashed gray;
+}
+
+#info-sp {
+	position: absolute;
+}
+.char #info-sp,
+.dragon #info-sp {
+	left: 204px;
+}
+.armor #info-sp {
+	display: none;
+}
+.agon #info-sp {
+	left: 226px;
+}
+
+#symbols {
+	background: black;
+	box-shadow: 0 0 5px 5px black;
+	position: absolute;
+	padding: 3px;
+	border: 5px solid white;
+	border-radius: 10px;
+	z-index: 1;
+}
+
+.symbol {
+	float: left;
+	background: black;
+	width: 30px;
+	height: 30px;
+	padding: 5px;
+	border: 1px solid white;
+	border-radius: 10px;
+	margin: 2px;
+	cursor: pointer;
+}
+.symbol:first-child {
+	clear: left;
+}
+
+.symbol img {
+	max-width: 100%;
+	max-height: 100%;
+	filter: drop-shadow(0 0 1px white);
+}
+
+@media (pointer: fine) {
+	.move-icons:hover, .move-icons.target:empty:hover {
+		outline: 1px dashed gray;
+	}
+	.move-icons.target:hover {
+		outline: none;
+	}
+	.move-icons.target img:hover {
+		outline: 2px solid red;
+	}
+	.symbol:hover {
+		background: white;
+	}
+	.symbol:hover img {
+		filter: drop-shadow(0 0 1px black);
+	}
+}
+
+/* Card Resizer */
+
+#handle {
+	position: absolute;
+	right: -10px;
+	width: 10px;
+	height: 100%;
+	cursor: ew-resize;
+}
+
+#handle:hover {
+	background: linear-gradient(black, gray, black);
+}
+
+#card-size {
+	background: white;
+	font-family: sans-serif;
+	position: fixed;
+	right: 0;
+	top: 0;
+	display: none;
+	padding: 5px;
+	border-radius: 0 0 0 5px;
+}
+
+/* Menus */
+
+.menu {
+	float: left;
+	position: relative;
+	padding: 10px;
+	white-space: nowrap;
+}
+
+.menu-title {
+	background-image: url('img/Nome.png');
+	background-size: 100% 100%;
+	font-family: 'Regular';
+	font-size: 25px;
+	color: white;
+	padding: 20px 30px;
+	width: max-content;
+}
+
+.row {
+	font-family: sans-serif;
+	padding: 5px 0;
+}
+
+.menu input {
+	font-size: 16px;
+	padding: 5px;
+	border: 1px solid;
+	border-radius: 5px;
+	outline: none;
+}
+.menu input[type='file'] {
+	background: white;
+	width: 240px;
+}
+.menu .jscolor {
+	width: 80px;
+}
+
+.menu label {
+	background: #585955;
+	font-family: 'Regular';
+	font-size: 16px;
+	padding: 5px;
+	border: 1px solid black;
+	border-radius: 10px;
+	cursor: pointer;
+}
+.menu input:checked + label {
+	background: black;
+	color: white;
+	box-shadow: 0 0 3px white;
+	border-color: white;
+}
+
+.menu input:disabled, .menu input:disabled + label {
+	opacity: 0.67;
+	color: gray !important;
+	border-color: gray;
+	border-style: dashed;
+	pointer-events: none;
+}
+
+.menu input[type='number'] {
+	text-align: right;
+	width: 80px;
+}
+
+.menu input[type='button'] {
+	cursor: pointer;
+}
+
+#swatches label {
+	background-image: radial-gradient(transparent, black);
+	width: 25px;
+	height: 10px;
+	display: inline-block;
+	border-radius: 5px;
+}
+#swatch-1 + label {
+	background-color: gray;
+}
+#swatch-2 + label {
+	background-color: sienna;
+}
+#swatch-3 + label {
+	background-color: yellow;
+}
+#swatch-4 + label {
+	background-color: limegreen;
+}
+#swatch-5 + label {
+	background-color: turquoise;
+}
+#swatch-6 + label {
+	background-color: skyblue;
+}
+#swatch-7 + label {
+	background-color: royalblue;
+}
+#swatch-8 + label {
+	background-color: mediumorchid;
+}
+#swatch-9 + label {
+	background-color: crimson;
+}
+#swatch-10 + label {
+	background-color: tan;
+}
+
+/* Export Helpers */
+
+#loading {
+	font-family: 'Rodeo';
+	color: white;
+}
+
+#card-render {
+	width: 140px;
+	height: 210px;
+	display: block;
+}
+
+#card-render-print {
+	width: 10cm;
+	height: 15cm;
+	display: none;
+}
+
+#logo {
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	width: 225px;
+	pointer-events: none;
+}
+
+/* Printing Style */
+
+@media print {
+	body {
+	    background: none;
+		margin: 0;
+	}
+
+	#creator { /* keep in dom to prevent height calculation issues (safari) */
+		width: 0;
+		height: 0;
+		opacity: 0; /* because rendering ignores elements with visibility: hidden */
+		overflow: hidden;
+	}
+	#card {
+		opacity: 0;
+	}
+	#types, #symbols, #card-size, .menu, body > div:last-child { /* last-child for jscolor */
+		display: none;
+	}
+
+	#card-render-print {
+		display: initial;
+	}
+}
