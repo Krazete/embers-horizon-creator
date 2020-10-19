@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="shortcut icon" href="http://www.acchiappasogni.org/msrpg/wp-content/uploads/2014/09/Musha_Shugyo_Favicon.png" type="image/x-icon">
-    <link rel="apple-touch-icon" href="http://www.acchiappasogni.org/msrpg/wp-content/uploads/2014/09/Musha_Shugyo_touch.png">
     <link type="text/css" rel="stylesheet" href="index.css">
-    <title>Musha Shugyo Creator</title>
+    <title>Embers Horizon Creator</title>
     <script type="text/javascript" src="script/jscolor.js"></script>
     <script type="text/javascript" src="script/jsscrub.js"></script>
     <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
     <div id="creator">
-        <div id="types">
-            <input id="type-dragon" type="radio" name="type" value="dragon">
-            <label for="type-dragon">Dragon</label>
-            <input id="type-char" type="radio" name="type" value="char">
-            <label for="type-char">Character</label>
-            <input id="type-armor" type="radio" name="type" value="armor">
-            <label for="type-armor">Armor</label>
-            <input id="type-agon" type="radio" name="type" value="agon">
-            <label for="type-agon">Agon</label>
-        </div>
         <div id="card" class="char">
-            <canvas id="card-bg" width="756" height="1134"></canvas>
+            <canvas id="card-bg" width="1134" height="756"></canvas>
             <div id="card-art-controller">
                 <img id="card-art">
             </div>
@@ -64,57 +52,6 @@
             </div>
             <div id="handle"></div>
         </div>
-        <div id="symbols" class="hidden">
-            <div id="stdsp">
-                <div class="symbol"><img src="image/simboliSTD/SP/Combo.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/SP/Danni.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/SP/Difesa.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/SP/Ferite.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/SP/PA.png"></div>
-            </div>
-            <div id="drgtc">
-                <div class="symbol"><img src="image/dragon/B_Allontana.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Cade.png"></div>
-                <div class="symbol"><img src="image/dragon/B_ComboTC.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Distanza.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Possente.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Riflette.png"></div>
-                <div class="symbol"><img src="image/dragon/B_SaltoOK.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Scaglia.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Schianta.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Trasla.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Ultra Durezza.png"></div>
-                <div class="symbol"><img src="image/dragon/B_Ultra agility.png"></div>
-            </div>
-            <div id="stdtc">
-                <div class="symbol"><img src="image/simboliSTD/TC/Allontana.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Cade.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Combo.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Distanza.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Possente.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Riflette.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/SaltoOK.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Scaglia.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Schianta.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Trasla.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Ultra Durezza.png"></div>
-                <div class="symbol"><img src="image/simboliSTD/TC/Ultra agility.png"></div>
-            </div>
-            <div id="advtc">
-                <div class="symbol"><img src="image/simboliADV/TC/Assorbimento.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Blitz2.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Cadi.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Conclusiva.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Congela.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Crawling 02.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Stordente.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/Tutto per tutto.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/danno continuato.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/dano_relativo.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/sforzo estremo.png"></div>
-                <div class="symbol"><img src="image/simboliADV/TC/vampirico mini.png"></div>
-            </div>
-        </div>
         <div id="card-size">200%</div>
         <div class="menu">
             <div class="menu-title">Background</div>
@@ -136,52 +73,8 @@
                 <input id="bg-file-custom" type="checkbox">
                 <label for="bg-file-custom">Custom</label>
                 <input id="bg-file" type="file" accept="image/*">
-                (2:3) <a href="template/Background.png" download>Template</a>
             </div>
 
-            <div class="menu-title">Name</div>
-            <div class="row">
-                <input id="name-color-custom" type="checkbox">
-                <label for="name-color-custom">Custom</label>
-                <input id="name-color-0" class="jscolor" data-jscolor="{hash: true}" value="#ffca1a">
-                <input id="name-color-1" class="jscolor" data-jscolor="{hash: true}" value="#fe6207">
-                <input id="name-color-auto" type="checkbox">
-                <label for="name-color-auto">Auto</label>
-            </div>
-
-            <div class="menu-title">Nameplate</div>
-            <div class="row">
-                <input id="np-color-custom" type="checkbox">
-                <label for="np-color-custom">Custom</label>
-                <input id="np-color-0" class="jscolor" data-jscolor="{hash: true}" value="#ffffff">
-                <input id="np-color-1" class="jscolor" data-jscolor="{hash: true}" value="#000000">
-                <input id="np-color-auto" type="checkbox">
-                <label for="np-color-auto">Auto</label>
-            </div>
-            <div class="row">
-                <input id="np-file-custom" type="checkbox">
-                <label for="np-file-custom">Custom</label>
-                <input id="np-file" type="file" accept="image/*">
-                (1:6) <a href="template/Nome.png" download>Template</a>
-            </div>
-
-            <div class="menu-title">Infobox</div>
-            <div class="row">
-                <input id="ib-color-custom" type="checkbox">
-                <label for="ib-color-custom">Custom</label>
-                <input id="ib-color-0" class="jscolor" data-jscolor="{hash: true}" value="#ffffff">
-                <input id="ib-color-1" class="jscolor" data-jscolor="{hash: true}" value="#000000">
-                <input id="ib-color-auto" type="checkbox">
-                <label for="ib-color-auto">Auto</label>
-            </div>
-            <div class="row">
-                <input id="ib-file-custom" type="checkbox">
-                <label for="ib-file-custom">Custom</label>
-                <input id="ib-file" type="file" accept="image/*">
-                (4:9) <a id="ib-template" href="img/Colonna.png" download>Template</a>
-            </div>
-        </div>
-        <div class="menu">
             <div class="menu-title">Card Art</div>
             <div class="row">
                 <input id="art-file" type="file" accept="image/*">
@@ -214,7 +107,6 @@
             <canvas id="card-canvas" class="hidden"></canvas>
             <img id="card-render">
         </div>
-        <img id="logo" src="img/Logo Dragon Fighters Advanced Musha Shugyo.png">
     </div>
     <img id="card-render-print">
 </body>

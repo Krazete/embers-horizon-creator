@@ -3,7 +3,6 @@ var rq = 2; /* render quality */
 var m = 1; /* magnification */
 
 var card, art;
-var cardType;
 var cardImageSize = {
     "bg": {"width": 756, "height": 1134},
     "np": {"width": 720, "height": 120},
@@ -13,9 +12,6 @@ var cardImage = {
     "bgDefault": undefined,
     "bgDefaultDragon": undefined,
     "bgUpload": undefined,
-    "npDefault": undefined,
-    "npDefaultDragon": undefined,
-    "npUpload": undefined,
     "ibDefaultChar": undefined,
     "ibDefaultArmor": undefined,
     "ibDefaultAgon": undefined,
@@ -30,18 +26,10 @@ var cardImageData = {
     "bgDefault": undefined,
     "bgDefaultDragon": undefined,
     "bgUpload": undefined,
-    "npDefault": undefined,
-    "npDefaultDragon": undefined,
-    "npUpload": undefined,
     "ibDefault": undefined,
     "ibDefaultArmor": undefined,
     "ibDefaultAgon": undefined,
     "ibUpload": undefined
-};
-var cardCanvasUpdater = {
-    "bg": undefined,
-    "np": undefined,
-    "ib": undefined
 };
 var renderCard;
 
@@ -161,47 +149,6 @@ function matchFont(element, context) {
     context.textBaseline = "middle";
 }
 
-function initName() {
-    var cardName = document.getElementById("card-name");
-    var nameCanvas = document.getElementById("card-name-canvas");
-    var nameContext = nameCanvas.getContext("2d");
-    var nameColor0 = document.getElementById("name-color-0");
-    var nameColor1 = document.getElementById("name-color-1");
-    var nameColorAuto = document.getElementById("name-color-auto");
-    var nameColorCustom = document.getElementById("name-color-custom");
-
-    function onInputCardName() {
-        nameContext.clearRect(0, 0, nameCanvas.width, nameCanvas.height);
-        nameContext.fillText(cardName.value, nameCanvas.width / 2, nameCanvas.height / 2);
-    }
-
-    function updateGradient(color0, color1) {
-        var lg = nameContext.createLinearGradient(0, 0, 0, nameCanvas.height);
-        lg.addColorStop(0, color0.value);
-        lg.addColorStop(1, color1.value);
-        nameContext.fillStyle = lg;
-        onInputCardName();
-    }
-
-    function onUncheckColorCustom() {
-        updateGradient({"value": "#ffca1a"}, {"value": "#fe6207"});
-    }
-
-    function onCheckColorCustom() {
-        updateGradient(nameColor0, nameColor1);
-    }
-
-    var nameRect = cardName.getBoundingClientRect();
-    nameCanvas.width = Math.round(rq * nameRect.width);
-    nameCanvas.height = Math.round(rq * nameRect.height);
-
-    matchFont(cardName, nameContext);
-
-    cardName.addEventListener("input", onInputCardName);
-    initColorInput(nameColor0, nameColor1, nameColorAuto, true, 3.7, updateGradient);
-    initCustomButton(nameColorCustom, [nameColor0, nameColor1, nameColorAuto], onUncheckColorCustom, onCheckColorCustom);
-}
-
 function initFileInput(file, update) {
     function onInputFile() {
         if (this.files.length > 0) {
@@ -232,15 +179,6 @@ function getDataID(code) {
     }
     else {
         id += "Default";
-        if ((code == "bg" || code == "np") && cardType == "dragon") {
-            id += "Dragon";
-        }
-        else if (code == "ib" && cardType == "armor") {
-            id += "Armor";
-        }
-        else if (code == "ib" && cardType == "agon") {
-            id += "Agon";
-        }
     }
 
     return id;
@@ -341,8 +279,6 @@ function initRecolorer(canvas, code, file, fileCustom, color0, color1, colorAuto
     initColorInput(color0, color1, colorAuto, false, 37, updateBackground);
     initCustomButton(fileCustom, [file], updateCanvas, updateCanvas);
     initCustomButton(colorCustom, [color0, color1, colorAuto], onInputColorCustom, onInputColorCustom);
-
-    cardCanvasUpdater[code] = updateCanvas;
 }
 
 function initRecolorers() {
@@ -354,22 +290,6 @@ function initRecolorers() {
     var bgColorAuto = document.getElementById("bg-color-auto");
     var bgColorCustom = document.getElementById("bg-color-custom");
     var swatches = document.getElementById("swatches").getElementsByTagName("input");
-
-    var np = document.getElementById("card-name-bg");
-    var npFile = document.getElementById("np-file");
-    var npFileCustom = document.getElementById("np-file-custom");
-    var npColor0 = document.getElementById("np-color-0");
-    var npColor1 = document.getElementById("np-color-1");
-    var npColorAuto = document.getElementById("np-color-auto");
-    var npColorCustom = document.getElementById("np-color-custom");
-
-    var ib = document.getElementById("card-info-bg");
-    var ibFile = document.getElementById("ib-file");
-    var ibFileCustom = document.getElementById("ib-file-custom");
-    var ibColor0 = document.getElementById("ib-color-0");
-    var ibColor1 = document.getElementById("ib-color-1");
-    var ibColorAuto = document.getElementById("ib-color-auto");
-    var ibColorCustom = document.getElementById("ib-color-custom");
 
     function initCardData(canvas, id, url) {
         var code = id.slice(0, 2);
@@ -416,37 +336,9 @@ function initRecolorers() {
     initCardData(ib, "ibDefaultAgon", "img/Agon.png");
 
     initRecolorer(bg, "bg", bgFile, bgFileCustom, bgColor0, bgColor1, bgColorAuto, bgColorCustom);
-    initRecolorer(np, "np", npFile, npFileCustom, npColor0, npColor1, npColorAuto, npColorCustom);
-    initRecolorer(ib, "ib", ibFile, ibFileCustom, ibColor0, ibColor1, ibColorAuto, ibColorCustom);
 }
 
 /* Card (mostly) */
-
-function initTypes() {
-    var types = document.getElementById("types");
-    var defaultType = document.getElementById("type-dragon");
-    var ibTemplate = document.getElementById("ib-template");
-    var ibTemplateURLs = {
-        "dragon": "template/Colonna.png",
-        "char": "template/Colonna.png",
-        "armor": "template/Armor.png",
-        "agon": "template/Agon.png"
-    };
-
-    function onClickTypes(e) {
-        if (e.target.tagName == "INPUT") {
-            card.className = e.target.value;
-            cardType = e.target.value;
-            ibTemplate.href = ibTemplateURLs[e.target.value];
-            cardCanvasUpdater.bg();
-            cardCanvasUpdater.np();
-            cardCanvasUpdater.ib();
-        }
-    }
-
-    types.addEventListener("click", onClickTypes);
-    defaultType.click();
-}
 
 function getMouse(e) {
     e.preventDefault();
@@ -713,93 +605,6 @@ function initArt() {
     artA.dispatchEvent(new InputEvent("input"));
 }
 
-function initSymbols() {
-    var symbols = document.getElementById("symbols");
-    var stdsp = document.getElementById("stdsp");
-    var drgtc = document.getElementById("drgtc");
-    var stdtc = document.getElementById("stdtc");
-    var advtc = document.getElementById("advtc");
-    var target;
-
-    function toggleSymbols(e) {
-        if (!e.target) { /* bubbled to top, found no trigger */
-            symbols.classList.add("hidden");
-            if (target) {
-                target.classList.remove("target");
-                target = undefined;
-            }
-        }
-        else if (target && target == e.target.parentElement) { /* img in .move-icons.target */
-            e.target.remove();
-        }
-        else if (e.target.classList.contains("move-icons")) { /* .move-icons */
-            if (e.target.id == "info-sp") {
-                stdsp.classList.remove("hidden");
-                drgtc.classList.add("hidden");
-                stdtc.classList.add("hidden");
-                advtc.classList.add("hidden");
-            }
-            else {
-                stdsp.classList.add("hidden");
-                if (cardType == "dragon") {
-                    drgtc.classList.remove("hidden");
-                    stdtc.classList.add("hidden");
-                }
-                else {
-                    drgtc.classList.add("hidden");
-                    stdtc.classList.remove("hidden");
-                }
-                advtc.classList.remove("hidden");
-            }
-            symbols.classList.remove("hidden");
-
-            var symbolRect = symbols.getBoundingClientRect();
-            var rect = e.target.getBoundingClientRect();
-            symbols.style.left = rect.left + "px";
-            symbols.style.top = rect.top - symbolRect.height - 10 + window.scrollY + "px"; /* -10 for shadow */
-            if (target && target != e.target) {
-                target.classList.remove("target");
-            }
-            target = e.target;
-            target.classList.add("target");
-        }
-        else if (e.target != symbols) { /* bubble up */
-            toggleSymbols({"target": e.target.parentElement});
-        }
-    }
-
-    function selectSP(e) {
-        if (e.target.classList.contains("symbol")) {
-            var icon = e.target.getElementsByTagName("img")[0];
-            newImage(icon.src).then(function (img) {
-                target.innerHTML = "";
-                target.appendChild(img);
-            });
-        }
-        else if (e.target != target) {
-            selectSP({"target": e.target.parentElement});
-        }
-    }
-
-    function selectSymbol(e) {
-        if (e.target.classList.contains("symbol")) {
-            var icon = e.target.getElementsByTagName("img")[0];
-            newImage(icon.src).then(function (img) {
-                target.appendChild(img);
-            });
-        }
-        else if (e.target != target) {
-            selectSymbol({"target": e.target.parentElement});
-        }
-    }
-
-    window.addEventListener("mousedown", toggleSymbols);
-    stdsp.addEventListener("click", selectSP);
-    drgtc.addEventListener("click", selectSymbol);
-    stdtc.addEventListener("click", selectSymbol);
-    advtc.addEventListener("click", selectSymbol);
-}
-
 function initStats() {
     var stat = document.getElementById("info-stat");
     var statArmor = document.getElementById("info-stat-armor");
@@ -883,20 +688,11 @@ function initTexts() {
 }
 
 function initInfo() {
-    initSymbols();
     initStats();
     initTexts();
 }
 
 /* Exporting */
-
-function isVisible(element) {
-    if (element == card) {
-        return true;
-    }
-    var style = getComputedStyle(element);
-    return style.display != "none" && style.visibility != "hidden" && isVisible(element.parentElement);
-}
 
 function initRenderer() {
     var infobox = document.getElementById("card-info");
@@ -1058,19 +854,15 @@ function initRenderer() {
             renderName();
 
             for (var i = 0; i < bubbles.length; i++) {
-                if (isVisible(bubbles[i])) {
-                    renderBubble(bubbles[i]);
-                }
+                renderBubble(bubbles[i]);
             }
             for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].type == "text" && isVisible(inputs[i])) {
+                if (inputs[i].type == "text") {
                     renderText(inputs[i]);
                 }
             }
             for (var i = 0; i < icons.length; i++) {
-                if (isVisible(icons[i])) {
-                    renderIcon(icons[i]);
-                }
+                renderIcon(icons[i]);
             }
 
             loading.classList.add("hidden");
@@ -1139,7 +931,6 @@ function init() {
 
     initRecolorers();
     initName();
-    initTypes();
     initHandle();
     initArt();
     initInfo();
