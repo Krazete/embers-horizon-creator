@@ -7,9 +7,6 @@
     <title>Musha Shugyo Creator</title>
     <script type="text/javascript" src="script/jscolor.js"></script>
     <script type="text/javascript" src="script/jsscrub.js"></script>
-    <script>if (typeof FileReader != "undefined") {var fr = FileReader;}</script><!-- because jspdf screws up FileReader in some situations -->
-    <script type="text/javascript" src="script/jspdf.min.js"></script>
-    <script>if (typeof fr != "undefined") {FileReader = fr;}</script><!-- because jspdf screws up FileReader in some situations -->
     <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
@@ -211,7 +208,6 @@
             <div class="menu-title">Export</div>
             <div class="row">
                 <input id="export-png" type="button" value="PNG">
-                <input id="export-pdf" type="button" value="PDF">
                 <input id="export-print" type="button" value="Print">
             </div>
             <div id="loading" class="hidden">LOADING</div>

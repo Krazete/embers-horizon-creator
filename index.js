@@ -120,8 +120,8 @@ function initColorInput(color0, color1, colorAuto, colorAutoChecked, depth, upda
         onChangeColor();
     }
 
-    color0.jscolor.onFineChange = onChangeColor;
-    color1.jscolor.onFineChange = onChangeColor;
+    color0.jscolor.onInput = onChangeColor;
+    color1.jscolor.onInput = onChangeColor;
 
     colorAuto.addEventListener("input", onInputColorAuto);
 
@@ -1082,7 +1082,6 @@ function initRenderer() {
 
 function initExport() {
     var exportPNG = document.getElementById("export-png");
-    var exportPDF = document.getElementById("export-pdf");
     var exportPrint = document.getElementById("export-print");
     var renderPNG = document.getElementById("card-render");
     var renderPrint = document.getElementById("card-render-print");
@@ -1098,15 +1097,6 @@ function initExport() {
             a.href = url;
             a.setAttribute("download", "msrpg_" + getTimestamp() + ".png");
             a.click();
-        });
-    }
-
-    function createPDF() {
-        renderCard().then(function (url) {
-            renderPNG.src = url;
-            var pdf = new jsPDF({"unit": "cm"}); /* todo: add letter format option? */
-            pdf.addImage(url, 'PNG', 1, 1, 10, 15);
-            pdf.save("msrpg_" + getTimestamp() + ".pdf");
         });
     }
 
@@ -1130,7 +1120,6 @@ function initExport() {
     initRenderer();
 
     exportPNG.addEventListener("click", createPNG);
-    exportPDF.addEventListener("click", createPDF);
     exportPrint.addEventListener("click", createPrint);
     window.addEventListener("beforeprint", createPrint);
 }
