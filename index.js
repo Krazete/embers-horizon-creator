@@ -370,13 +370,13 @@ function initHandle() {
 
     function onHandle(e) {
         e = getMouse(e);
-        var n = (e.x - cardRect.left - m * 15) / 756; /* +m*15 for border */
-        m = Math.max(0.5, Math.min(n, 1));
+        var n = (e.x - cardRect.left - m * 15) / 2480; /* +m*15 for border */
+        m = Math.max(0.2, Math.min(n, 0.5));
 
         card.style.transform = "scale(" + m + ")";
-        card.style.marginRight = (m - 1) * 776 + "px"; /* +20 for border */
-        card.style.marginBottom = (m - 1) * 1154 + "px"; /* +20 for border */
-        cardSize.innerHTML = Math.round(200 * m) + "%";
+        card.style.marginRight = (m - 1) * 2500 + "px"; /* +20 for border */
+        card.style.marginBottom = (m - 1) * 1792 + "px"; /* +20 for border */
+        cardSize.innerHTML = Math.round(100 * m) + "%";
     }
 
     function onHandleStart(e) {
@@ -929,8 +929,8 @@ function init() {
     card = document.getElementById("card");
     art = document.getElementById("card-art");
 
-    initRecolorers();
-    initName();
+    // initRecolorers();
+    // initName();
     initHandle();
     initArt();
     initInfo();
@@ -944,4 +944,4 @@ function warn(e) {
 }
 
 window.addEventListener("load", init);
-window.addEventListener("beforeunload", warn);
+// window.addEventListener("beforeunload", warn);
