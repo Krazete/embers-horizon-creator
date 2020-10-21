@@ -576,10 +576,19 @@ function initTexts() {
     }
 
     cardIllustratorInput.addEventListener("input", autoresize);
+    if (cardIllustratorInput.value) {
+        cardIllustratorInput.dispatchEvent(new InputEvent("input"));
+    }
     cardOriginInput.addEventListener("input", autoresize);
+    if (cardOriginInput.value) {
+        cardOriginInput.dispatchEvent(new InputEvent("input"));
+    }
     for (var i = 0; i < inputs.length; i++) {
         if (!inputs[i].disabled) {
             inputs[i].addEventListener("input", autofit);
+            if (inputs[i].value) {
+                inputs[i].dispatchEvent(new InputEvent("input"));
+            }
         }
     }
     for (var i = 0; i < textareas.length; i++) {
@@ -589,6 +598,10 @@ function initTexts() {
         textareas[i].addEventListener("blur", autopad); /* revert reversion of autopad */
         textareas[i].addEventListener("blur", autoscroll);
         textareas[i].addEventListener("scroll", autoscroll);
+        if (textareas[i].value) {
+            textareas[i].dispatchEvent(new InputEvent("input"));
+            textareas[i].dispatchEvent(new InputEvent("blur"));
+        }
     }
 }
 
@@ -836,7 +849,7 @@ function initRenderer() {
         context.save();
         var style = matchFont(element, context);
         context.fillText(
-            element.tagName == "INPUT" ? element.value : element.innerHTML,
+            element.tagName == "INPUT" || element.tagName == "TEXTAREA" ? element.value : element.innerHTML,
             rect.left + rect.width * (
                 style.textAlign == "right" ? 1 : style.textAlign == "center" ? 0.5 : 0
             ) - cardRect.left - 10,
@@ -882,7 +895,7 @@ function initRenderer() {
             }
         }
         for (var i = 0; i < textareas.length; i++) {
-            renderTextArea(textareas[i]);
+            renderText(textareas[i]);
         }
         renderText(cardIllustratorSpan);
         renderText(cardIllustratorInput);
