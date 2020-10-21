@@ -657,11 +657,6 @@ function initStats() {
     }
 }
 
-function initInfo() {
-    initTexts();
-    initStats();
-}
-
 /* Exporting */
 
 function initRenderer() {
@@ -881,7 +876,8 @@ function init() {
     initGemRecolorer();
     initHandle();
     initArts();
-    initInfo();
+    initTexts();
+    initStats();
     initExport();
 }
 
