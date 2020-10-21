@@ -232,6 +232,15 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	margin: 0 2px;
 	box-sizing: border-box;
 }
+.bubble.prospective {
+	background: #c0c0c0;
+}
+.bubble.checked {
+	background: black;
+}
+.bubble.checked.prospective {
+	background: #808080;
+}
 
 #nome-eroe {
 	width: 450px;
@@ -473,6 +482,12 @@ input[type='radio'], input[type='checkbox'], .hidden {
 		transform: initial;
 		border: none;
 		border-radius: 0;
+	}
+	.bubble.prospective {
+		background: none;
+	}
+	.bubble.checked.prospective {
+		background: black;
 	}
 	#circle, #handle, #card-size, #menu, .jscolor-picker-wrap {
 		display: none;

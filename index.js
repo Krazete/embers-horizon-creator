@@ -597,8 +597,8 @@ function initTexts() {
 }
 
 function initStats() {
-    var stat = document.getElementById("info-stat");
-    var statArmor = document.getElementById("info-stat-armor");
+    var mcs = document.getElementById("mente-corpo-spirito");
+    var stats = mcs.getElementsByClassName("bubbleset");
 
     function onOverStat(e) {
         if (e.target.classList.contains("bubble")) {
@@ -652,8 +652,9 @@ function initStats() {
         stat.addEventListener("click", onClickStat);
     }
 
-    initStat(stat);
-    initStat(statArmor);
+    for (var i = 0; i < stats.length; i++) {
+        initStat(stats[i]);
+    }
 }
 
 function initInfo() {
