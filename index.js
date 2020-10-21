@@ -530,17 +530,22 @@ function initArts() {
 }
 
 function initTexts() {
-    var cardInfo = document.getElementById("card-info");
-    var inputs = cardInfo.getElementsByTagName("input");
     var cardIllustratorInput = document.getElementById("card-illustrator-input");
     var cardOriginInput = document.getElementById("card-origin-input");
+    var cardInfo = document.getElementById("card-info");
+    var inputs = cardInfo.getElementsByTagName("input");
+    var textareas = cardInfo.getElementsByTagName("textarea");
     var textRuler = newCanvas(0, 0).getContext("2d");
 
     function getTextMetrics(input) {
         var style = getComputedStyle(input);
         textRuler.font = style.fontSize + " " + style.fontFamily;
-        console.log(textRuler.measureText(input.value));
         return textRuler.measureText(input.value);
+    }
+
+    function autoresize() {
+        var textSize = getTextMetrics(this);
+        this.style.width = Math.max(20, Math.min(textSize.width, 2000)) + "px";
     }
 
     function autofit() {
@@ -554,18 +559,30 @@ function initTexts() {
         }
     }
 
-    function autoresize() {
+    function autopad() {
+        var rect = getScaledRect(this);
+        this.value = this.value.replace(/\n/g, "");
         var textSize = getTextMetrics(this);
-        this.style.width = Math.max(20, textSize.width) + "px";
+        if (textSize.width < rect.width) {
+            this.value = "\n" + this.value;
+        }
     }
 
+    function autoscroll() {
+        this.scrollTo(0, this.scrollHeight);
+    }
+
+    cardIllustratorInput.addEventListener("input", autoresize);
+    cardOriginInput.addEventListener("input", autoresize);
     for (var i = 0; i < inputs.length; i++) {
         if (!inputs[i].disabled) {
             inputs[i].addEventListener("input", autofit);
         }
     }
-    cardIllustratorInput.addEventListener("input", autoresize);
-    cardOriginInput.addEventListener("input", autoresize);
+    for (var i = 0; i < textareas.length; i++) {
+        textareas[i].addEventListener("change", autopad);
+        textareas[i].addEventListener("blur", autoscroll);
+    }
 }
 
 function initStats() {
