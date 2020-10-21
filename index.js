@@ -798,9 +798,7 @@ function initRenderer() {
 
 function initExport() {
     var exportPNG = document.getElementById("export-png");
-    var exportPrint = document.getElementById("export-print");
     var renderPNG = document.getElementById("card-render");
-    var renderPrint = document.getElementById("card-render-print");
 
     function getTimestamp() {
         return Date.now().toString(36);
@@ -836,7 +834,6 @@ function initExport() {
     initRenderer();
 
     exportPNG.addEventListener("click", createPNG);
-    exportPrint.addEventListener("click", createPrint);
     window.addEventListener("beforeprint", createPrint);
 }
 
