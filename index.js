@@ -529,6 +529,45 @@ function initArts() {
     initArt("hero");
 }
 
+function initTexts() {
+    var cardInfo = document.getElementById("card-info");
+    var inputs = cardInfo.getElementsByTagName("input");
+    var cardIllustratorInput = document.getElementById("card-illustrator-input");
+    var cardOriginInput = document.getElementById("card-origin-input");
+    var textRuler = newCanvas(0, 0).getContext("2d");
+
+    function getTextMetrics(input) {
+        var style = getComputedStyle(input);
+        textRuler.font = style.fontSize + " " + style.fontFamily;
+        console.log(textRuler.measureText(input.value));
+        return textRuler.measureText(input.value);
+    }
+
+    function autofit() {
+        var rect = getScaledRect(this);
+        for (var i = 50; i > 0; i--) {
+            this.style.fontSize = i + "px";
+            var textSize = getTextMetrics(this);
+            if (textSize.width < rect.width) {
+                break;
+            }
+        }
+    }
+
+    function autoresize() {
+        var textSize = getTextMetrics(this);
+        this.style.width = Math.max(20, textSize.width) + "px";
+    }
+
+    for (var i = 0; i < inputs.length; i++) {
+        if (!inputs[i].disabled) {
+            inputs[i].addEventListener("input", autofit);
+        }
+    }
+    cardIllustratorInput.addEventListener("input", autoresize);
+    cardOriginInput.addEventListener("input", autoresize);
+}
+
 function initStats() {
     var stat = document.getElementById("info-stat");
     var statArmor = document.getElementById("info-stat-armor");
@@ -589,31 +628,9 @@ function initStats() {
     initStat(statArmor);
 }
 
-function initTexts() {
-    var pas = document.getElementsByClassName("move-pa");
-    var bonuses = document.getElementsByClassName("move-bonus");
-
-    function autoresize() {
-        var context = newCanvas(0, 0).getContext("2d");
-        var style = getComputedStyle(this);
-        context.font = style.fontSize + " " + style.fontFamily;
-
-        var placeholderSize = context.measureText(this.placeholder);
-        var textSize = context.measureText(this.value);
-        this.style.width = Math.max(placeholderSize.width, textSize.width) + "px";
-    }
-
-    for (var i = 0; i < pas.length; i++) {
-        pas[i].addEventListener("input", autoresize);
-    }
-    for (var i = 0; i < bonuses.length; i++) {
-        bonuses[i].addEventListener("input", autoresize);
-    }
-}
-
 function initInfo() {
-    initStats();
     initTexts();
+    initStats();
 }
 
 /* Exporting */
@@ -809,25 +826,8 @@ function initExport() {
             renderPNG.src = url;
             var a = document.createElement("a");
             a.href = url;
-            a.setAttribute("download", "msrpg_" + getTimestamp() + ".png");
+            a.setAttribute("download", "ehrpg_" + getTimestamp() + ".png");
             a.click();
-        });
-    }
-
-    function printOnce() {
-        print();
-        this.removeEventListener("load", printOnce);
-        window.addEventListener("beforeprint", createPrint);
-    }
-
-    function createPrint(e) {
-        renderCard().then(function (url) {
-            renderPNG.src = url;
-            if (e.type == "click") {
-                renderPrint.addEventListener("load", printOnce);
-                window.removeEventListener("beforeprint", createPrint);
-            }
-            renderPrint.src = url;
         });
     }
 

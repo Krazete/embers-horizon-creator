@@ -114,11 +114,11 @@
 
         <div id="card-illustrator" class="card-credits">
             <span>Illustrazione by</span>
-            <input type="text" placeholder="Nome">
+            <input id="card-illustrator-input" type="text" placeholder="Nome">
         </div>
         <div id="card-origin" class="card-credits">
             <span>Personaggio tratto da:</span>
-            <input type="text" placeholder="Origine">
+            <input id="card-origin-input" type="text" placeholder="Origine">
         </div>
 
         <div id="handle"></div>
