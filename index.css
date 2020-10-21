@@ -250,6 +250,7 @@ input[type='radio'], input[type='checkbox'], .hidden {
 
 #mente-corpo-spirito input {
 	width: 78px;
+	text-align: center;
 }
 
 #card-info .centered {

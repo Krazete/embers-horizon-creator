@@ -12,11 +12,11 @@
         <div id="card-bg"></div>
 
         <img id="card-frame-left" src="img/leftFrame.png">
-        <img id="card-setting" src="img/setting.png">
-        <canvas id="card-gem" width="176" height="178"></canvas>
         <div id="card-hero-controller">
             <img id="card-hero">
         </div>
+        <img id="card-setting" src="img/setting.png">
+        <canvas id="card-gem" width="176" height="178"></canvas>
         <div id="card-icon-controller">
             <img id="card-icon">
         </div>
@@ -60,7 +60,7 @@
             <div id="mente-corpo-spirito">
                 <span>Mente</span>
                 <div class="underlined">
-                    <input type="text" disabled>
+                    <input type="text">
                 </div>
                 <div class="bubbleset">
                     <div class="bubble"></div>
@@ -69,7 +69,7 @@
                 </div>
                 <span>Corpo</span>
                 <div class="underlined">
-                    <input type="text" disabled>
+                    <input type="text">
                 </div>
                 <div class="bubbleset">
                     <div class="bubble"></div>
@@ -78,7 +78,7 @@
                 </div>
                 <span>Spirito</span>
                 <div class="underlined">
-                    <input type="text" disabled>
+                    <input type="text">
                 </div>
                 <div class="bubbleset">
                     <div class="bubble"></div>

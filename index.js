@@ -559,9 +559,14 @@ function initTexts() {
         }
     }
 
+    function sanitize() {
+        if (this.value.indexOf("\n")) {
+            this.value = this.value.replace(/\n/g, "");
+        }
+    }
+
     function autopad() {
         var rect = getScaledRect(this);
-        this.value = this.value.replace(/\n/g, "");
         var textSize = getTextMetrics(this);
         if (textSize.width < rect.width) {
             this.value = "\n" + this.value;
@@ -569,7 +574,9 @@ function initTexts() {
     }
 
     function autoscroll() {
-        this.scrollTo(0, this.scrollHeight);
+        if (document.activeElement != this) {
+            this.scrollTo(0, this.scrollHeight);
+        }
     }
 
     cardIllustratorInput.addEventListener("input", autoresize);
@@ -580,8 +587,10 @@ function initTexts() {
         }
     }
     for (var i = 0; i < textareas.length; i++) {
+        textareas[i].addEventListener("input", sanitize);
         textareas[i].addEventListener("change", autopad);
         textareas[i].addEventListener("blur", autoscroll);
+        textareas[i].addEventListener("scroll", autoscroll);
     }
 }
 
