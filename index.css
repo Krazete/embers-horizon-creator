@@ -21,6 +21,10 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	display: none;
 }
 
+input:disabled {
+	cursor: not-allowed;
+}
+
 #creator {
 	float: left;
 	padding: 10px;
@@ -34,16 +38,18 @@ input[type='radio'], input[type='checkbox'], .hidden {
     width: 2480px;
 	height: 1772px;
 	transform-origin: left top;
-	transform: scale(0.4);
+	transform: scale(0.45); /* redundancy */
 	border: 10px solid black;
 	border-radius: 10px;
+    margin-right: -1375px; /* redundancy */
+    margin-bottom: -985.6px; /* redundancy */
 	-ms-user-select: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
 }
 
-#card input[type='text'] {
+#card input[type='text'], #card textarea {
 	background: none;
 	padding: 0;
 	border: none;
@@ -182,6 +188,8 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	white-space: nowrap;
 }
 
+/* Card Right Contents */
+
 #card-info > * {
 	line-height: 100px;
 	vertical-align: bottom;
@@ -190,16 +198,100 @@ input[type='radio'], input[type='checkbox'], .hidden {
 #card-info input[type='text'] {
 	font-family: 'Rodeo';
 	font-size: inherit;
-	vertical-align: middle;
+	vertical-align: bottom;
+	margin: 0 12px;
 }
 
-#card-info .box {
+#card-info textarea {
+	font-family: 'Rodeo';
+	font-size: inherit;
+	vertical-align: bottom;
+	line-height: 50px;
+	padding-top: 30px;
+	margin: 0;
+	resize: none;
+}
+
+.underlined {
+	position: relative;
+	display: inline-block;
+}
+.underlined:after {
+	content: '';
+	background: black;
+	position: absolute;
+	width: 100%;
+	height: 2px;
+	left: 0;
+	bottom: 30px;
+}
+
+.squbble {
 	width: 54px;
 	height: 54px;
 	display: inline-block;
 	border: 4px solid black;
 	border-radius: 12px;
+	margin: 16px 4px 0 0;
 	box-sizing: border-box;
+	cursor: not-allowed;
+}
+
+.bubbleset {
+	display: inline-block;
+	margin: 36px 70px 0 0;
+	cursor: pointer;
+}
+
+.bubble {
+	float: left;
+	display: block;
+	width: 42px;
+	height: 42px;
+	border: 4px solid black;
+	border-radius: 21px;
+	margin: 0 2px;
+	box-sizing: border-box;
+}
+
+#nome-eroe {
+	width: 450px;
+}
+#giocatore {
+	width: 404px;
+}
+
+#archetipo input {
+	width: 268px;
+}
+
+#background {
+	width: 1054px;
+}
+
+#mente-corpo-spirito input {
+	width: 78px;
+}
+
+#card-info .centered {
+	text-align: center;
+	line-height: initial;
+}
+
+.memorie-row {
+	display: inline-block;
+}
+
+#card-info .memorie-row input[type='text'] {
+	margin: 0;
+}
+
+.memorie-text {
+	width: 252px;
+}
+
+.memorie-text-disabled {
+	width: 88px;
 }
 
 /* Card Credits */
@@ -226,124 +318,10 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	color: inherit;
 	font-family: inherit;
 	font-size: inherit;
+	width: 100px;
 }
 
-/*temp*/
-#tempo{position:absolute;width:100%;height:100%;left:0;top:0;opacity:0.5;pointer-events:none;}
-
-
-
-
-
-
-
-/* Infobox Stats */
-
-#card-info .bubble {
-	float: left;
-    display: block;
-	padding: 6px 2px 6px 2px;
-	cursor: pointer;
-}
-#card-info .bubble:first-child {
-	clear: left;
-}
-#card-info .bubble:after {
-	content: '';
-	display: block;
-	width: 16px;
-	height: 16px;
-	box-sizing: border-box;
-    border: 2px solid black;
-    border-radius: 50%;
-}
-#card-info .bubble.checked:after {
-	background: black;
-}
-@media (pointer: fine) {
-	#card input[type='text']:hover {
-		outline: 1px dashed gray;
-	}
-	#card input[type='text']:focus {
-		outline: none;
-	}
-	#card .bubble.prospective:after {
-		box-shadow: inset 0 0 6px black;
-	}
-	#card .bubble.checked.prospective:after {
-		background: gray;
-	}
-}
-
-/* Infobox Moves */
-
-#info-moves {
-	position: relative;
-	margin-top: 186px;
-	white-space: nowrap;
-}
-
-#info-moves > div {
-	height: 65px;
-	margin-bottom: 8px;
-}
-
-.move-name {
-	font-family: 'Regular';
-	width: 288px;
-	display: block;
-}
-
-.move-pa {
-	clear: left;
-	width: 52px;
-	font-family: 'Rodeo';
-}
-
-.move-bonus {
-	font-family: 'Rodeo';
-	color: red;
-}
-
-/* Infobox Symbols */
-
-.move-icons {
-	min-width: 20px;
-	height: 20px;
-	vertical-align: text-bottom;
-	display: inline-block;
-	margin: 5px;
-	cursor: pointer;
-}
-.move-icons:empty {
-	outline: 1px dashed gray;
-}
-
-.move-icons img {
-	max-width: 20px;
-	max-height: 20px;
-	margin: 0 2px;
-}
-.move-icons.target img {
-	outline: 1px dashed gray;
-}
-
-#info-sp {
-	position: absolute;
-	left: 204px;
-}
-
-@media (pointer: fine) {
-	.move-icons:hover, .move-icons.target:empty:hover {
-		outline: 1px dashed gray;
-	}
-	.move-icons.target:hover {
-		outline: none;
-	}
-	.move-icons.target img:hover {
-		outline: 2px solid red;
-	}
-}
+#tempo{position: absolute; width: 100%; height: 100%; left: 0; top: 0; opacity: 0.2; pointer-events: none;}
 
 /* Card Resizer */
 
@@ -373,60 +351,90 @@ input[type='radio'], input[type='checkbox'], .hidden {
 
 /* Menus */
 
-.menu {
+#menu {
 	float: left;
+	font-family: 'Goudy';
 	position: relative;
 	padding: 10px;
 	white-space: nowrap;
 }
 
-.menu-title {
-	background-image: url('img/Nome.png');
-	background-size: 100% 100%;
-	font-family: 'Regular';
-	font-size: 25px;
+#menu .menu-title {
 	color: white;
-	padding: 20px 30px;
-	width: max-content;
+	font-size: 25px;
+	text-shadow: -3px 2px black;
+	margin: 0;
 }
 
 .row {
-	font-family: sans-serif;
 	padding: 5px 0;
 }
 
-.menu input {
+#menu input {
 	font-size: 16px;
 	padding: 5px;
 	border: 1px solid;
 	border-radius: 5px;
 	outline: none;
 }
-.menu input[type='file'] {
+#menu input[type='file'] {
 	background: white;
 	width: 240px;
 }
-.menu .jscolor {
+#menu .jscolor {
 	width: 80px;
 }
 
-.menu label {
-	background: #585955;
-	font-family: 'Regular';
+#menu label {
+	background-color: #585955;
 	font-size: 16px;
-	padding: 5px;
+	padding: 3px 5px 0 5px;
 	border: 1px solid black;
 	border-radius: 10px;
 	cursor: pointer;
 }
-.menu input:checked + label {
-	background: black;
+#menu input:checked + label {
+	background-color: black;
 	color: white;
 	box-shadow: 0 0 3px white;
 	border-color: white;
 }
 
-.menu input:disabled, .menu input:disabled + label {
+#swatches label {
+	background-size: 125%;
+	background-position: center;
+	width: 40px;
+	height: 20px;
+	display: inline-block;
+}
+
+#swatch-1 + label {
+	background-image: url('img/Gemme/gemma-01.png');
+}
+#swatch-2 + label {
+	background-image: url('img/Gemme/gemma-02.png');
+}
+#swatch-3 + label {
+	background-image: url('img/Gemme/gemma-03.png');
+}
+#swatch-4 + label {
+	background-image: url('img/Gemme/gemma-04.png');
+}
+#swatch-5 + label {
+	background-image: url('img/Gemme/gemma-05.png');
+}
+#swatch-6 + label {
+	background-image: url('img/Gemme/gemma-06.png');
+}
+#swatch-7 + label {
+	background-image: url('img/Gemme/gemma-07.png');
+}
+
+#menu label img {
+	width: 35px;
+}
+
+#menu input:disabled, #menu input:disabled + label {
 	opacity: 0.67;
 	color: gray !important;
 	border-color: gray;
@@ -434,19 +442,18 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	pointer-events: none;
 }
 
-.menu input[type='number'] {
+#menu input[type='number'] {
 	text-align: right;
 	width: 80px;
 }
 
-.menu input[type='button'] {
+#menu input[type='button'] {
 	cursor: pointer;
 }
 
 /* Export Helpers */
 
 #loading {
-	font-family: 'Rodeo';
 	color: white;
 }
 
@@ -479,7 +486,7 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	#card {
 		opacity: 0;
 	}
-	#card-size, .menu, body > div:last-child { /* last-child for jscolor */
+	#card-size, #menu, body > div:last-child { /* last-child for jscolor */
 		display: none;
 	}
 

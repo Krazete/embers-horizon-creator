@@ -1,36 +1,9 @@
 var pq = 0.75; /* preview quality */
 var rq = 2; /* render quality */
-var m = 1; /* magnification */
+var m = 0.45; /* magnification */
 
 var card, art;
-var cardImageSize = {
-    "bg": {"width": 756, "height": 1134},
-    "np": {"width": 720, "height": 120},
-    "ib": {"width": 436, "height": 981}
-};
-var cardImage = {
-    "bgDefault": undefined,
-    "bgDefaultDragon": undefined,
-    "bgUpload": undefined,
-    "ibDefaultChar": undefined,
-    "ibDefaultArmor": undefined,
-    "ibDefaultAgon": undefined,
-    "ibUpload": undefined
-};
-var cardGradientData = {
-    "bg": undefined,
-    "np": undefined,
-    "ib": undefined
-};
-var cardImageData = {
-    "bgDefault": undefined,
-    "bgDefaultDragon": undefined,
-    "bgUpload": undefined,
-    "ibDefault": undefined,
-    "ibDefaultArmor": undefined,
-    "ibDefaultAgon": undefined,
-    "ibUpload": undefined
-};
+var gemImage, gemGradientData, gemImageData;
 var renderCard;
 
 /* General Functions */
@@ -117,29 +90,6 @@ function initColorInput(color0, color1, colorAuto, colorAutoChecked, depth, upda
     colorAuto.dispatchEvent(new InputEvent("input"));
 }
 
-function initCustomButton(custom, inputs, onUncheck, onCheck) {
-    function onInputCustom() {
-        if (custom.checked) {
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].removeAttribute("disabled");
-                inputs[i].dispatchEvent(new InputEvent("input")); /* reclick auto */
-            }
-            onCheck();
-        }
-        else {
-            for (var i = 0; i < inputs.length; i++) {
-                inputs[i].setAttribute("disabled", true);
-            }
-            onUncheck();
-        }
-    }
-
-    custom.addEventListener("input", onInputCustom);
-
-    custom.checked = false;
-    custom.dispatchEvent(new InputEvent("input"));
-}
-
 function matchFont(element, context) {
     var style = getComputedStyle(element);
     var fontSize = style.fontSize.match(/(\d+(?:\.\d+)?)(\w+)/);
@@ -167,21 +117,6 @@ function initFileInput(file, update) {
 
     file.addEventListener("change", onInputFile);
     file.dispatchEvent(new InputEvent("change"));
-}
-
-function getDataID(code) {
-    var file = document.getElementById(code + "-file");
-    var fileCustom = document.getElementById(code + "-file-custom");
-    var id = code;
-
-    if (fileCustom.checked && file.files.length > 0) {
-        id += "Upload";
-    }
-    else {
-        id += "Default";
-    }
-
-    return id;
 }
 
 function dataLoop(imageData, f) { /* for ImageData objects */
@@ -221,121 +156,90 @@ function applyGradient(imageData, gradientData) {
     return newData;
 }
 
-function initRecolorer(canvas, code, file, fileCustom, color0, color1, colorAuto, colorCustom) {
+function initGemRecolorer() {
+    var canvas = document.getElementById("card-gem");
+    var context = canvas.getContext("2d");
     var gradientCanvas = newCanvas(256, 1);
     var gradientContext = gradientCanvas.getContext("2d");
-    var gradientData;
-    var context = canvas.getContext("2d");
-
-    function updateGradient(color0, color1) {
-        var lg = gradientContext.createLinearGradient(0, 0, 256, 0);
-        lg.addColorStop(1, color0.value);
-        lg.addColorStop(0, color1.value);
-        gradientContext.fillStyle = lg;
-        gradientContext.fillRect(0, 0, 256, 1);
-        gradientData = gradientContext.getImageData(0, 0, 256, 1);
-        cardGradientData[code] = gradientData;
-    }
-
-    function updateCanvas() {
-        var id = getDataID(code);
-
-        if (!cardImageData[id]) {
-            return;
-        }
-
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        if (colorCustom.checked) {
-            context.putImageData(applyGradient(cardImageData[id], gradientData), 0, 0);
-        }
-        else {
-            context.putImageData(cardImageData[id], 0, 0);
-        }
-    }
-
-    function updateBackground(color0, color1) {
-        updateGradient(color0, color1);
-        updateCanvas();
-    }
-
-    function updateFile(dataURL) {
-        newImage(dataURL).then(function (img) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.drawImage(img, 0, 0, canvas.width, canvas.height);
-            cardImageData[code + "Upload"] = context.getImageData(0, 0, canvas.width, canvas.height);
-            cardImage[code + "Upload"] = img;
-            updateCanvas();
-        }).catch(function (img) {
-            console.warn("Unable to load image.", img);
-            updateCanvas();
-        });
-    }
-
-    function onInputColorCustom() {
-        updateBackground(color0, color1);
-    }
-
-    initFileInput(file, updateFile);
-    initColorInput(color0, color1, colorAuto, false, 37, updateBackground);
-    initCustomButton(fileCustom, [file], updateCanvas, updateCanvas);
-    initCustomButton(colorCustom, [color0, color1, colorAuto], onInputColorCustom, onInputColorCustom);
-}
-
-function initRecolorers() {
-    var bg = document.getElementById("card-bg");
-    var bgFile = document.getElementById("bg-file");
-    var bgFileCustom = document.getElementById("bg-file-custom");
-    var bgColor0 = document.getElementById("bg-color-0");
-    var bgColor1 = document.getElementById("bg-color-1");
-    var bgColorAuto = document.getElementById("bg-color-auto");
-    var bgColorCustom = document.getElementById("bg-color-custom");
+    var color0 = document.getElementById("gem-color-0");
+    var color1 = document.getElementById("gem-color-1");
+    var colorAuto = document.getElementById("gem-color-auto");
+    var colorCustom = document.getElementById("gem-color-custom");
     var swatches = document.getElementById("swatches").getElementsByTagName("input");
 
-    function initCardData(canvas, id, url) {
-        var code = id.slice(0, 2);
+    function updateCanvas() {
+        if (gemImageData) {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            if (colorCustom.checked) {
+                context.putImageData(applyGradient(gemImageData, gemGradientData), 0, 0);
+            }
+            else {
+                context.putImageData(gemImageData, 0, 0);
+            }
+        }
+    }
+
+    function updateGemImage(url) {
         newImage(url).then(function (img) {
             var canvasCopy = newCanvas(canvas.width, canvas.height);
             var context = canvasCopy.getContext("2d");
             context.drawImage(img, 0, 0, canvasCopy.width, canvasCopy.height);
-            cardImageData[id] = context.getImageData(0, 0, canvasCopy.width, canvasCopy.height);
-            cardImage[id] = img;
-            cardCanvasUpdater[code]();
+            gemImageData = context.getImageData(0, 0, canvasCopy.width, canvasCopy.height);
+            gemImage = img;
+            updateCanvas();
         });
     }
 
-    function onInputSwatch() {
-        var n = this.value.padStart(2, 0);
-        if (bgFileCustom.checked) {
-            bgFileCustom.click();
-        }
-        if (bgColorCustom.checked) {
-            bgColorCustom.click();
-        }
-        initCardData(bg, "bgDefault", "img/bg/large/Background_" + n + ".jpg");
-        initCardData(bg, "bgDefaultDragon", "img/bg/dragon/Background_" + n + ".jpg");
+    function updateGradient(color0, color1) {
+        var lg = gradientContext.createLinearGradient(0, 0, 256, 0);
+        lg.addColorStop(1, "white");
+        lg.addColorStop(0.75, color0.value);
+        lg.addColorStop(0, color1.value);
+        gradientContext.fillStyle = lg;
+        gradientContext.fillRect(0, 0, 256, 1);
+        gemGradientData = gradientContext.getImageData(0, 0, 256, 1);
     }
 
-    bg.width = pq * cardImageSize.bg.width;
-    bg.height = pq * cardImageSize.bg.height;
-    np.width = pq * cardImageSize.np.width;
-    np.height = pq * cardImageSize.np.height;
-    ib.width = pq * cardImageSize.ib.width;
-    ib.height = pq * cardImageSize.ib.height;
+    function onInputCustom() {
+        if (colorCustom.checked) {
+            color0.removeAttribute("disabled");
+            color1.removeAttribute("disabled");
+            colorAuto.removeAttribute("disabled");
+            colorAuto.dispatchEvent(new InputEvent("input"));
+        }
+        else {
+            color0.setAttribute("disabled", true);
+            color1.setAttribute("disabled", true);
+            colorAuto.setAttribute("disabled", true);
+        }
+        updateCanvas();
+    }
+
+    function onInputSwatch() {
+        if (colorCustom.checked) {
+            colorCustom.click();
+        }
+        updateGemImage("img/Gemme/gemma-0" + this.value + ".png");
+    }
+
+    function onColorInput(color0, color1) {
+        updateGradient(color0, color1);
+        updateCanvas();
+    }
 
     swatches[0].checked = true;
     for (var i = 0; i < swatches.length; i++) {
         swatches[i].addEventListener("input", onInputSwatch);
     }
 
-    initCardData(bg, "bgDefault", "img/bg/large/Background_01.jpg");
-    initCardData(bg, "bgDefaultDragon", "img/bg/dragon/Background_01.jpg");
-    initCardData(np, "npDefault", "img/Nome.png");
-    initCardData(np, "npDefaultDragon", "img/NomeDragon.png");
-    initCardData(ib, "ibDefault", "img/Colonna.png");
-    initCardData(ib, "ibDefaultArmor", "img/Armor.png");
-    initCardData(ib, "ibDefaultAgon", "img/Agon.png");
+    updateGemImage("img/Gemme/gemma-01.png");
 
-    initRecolorer(bg, "bg", bgFile, bgFileCustom, bgColor0, bgColor1, bgColorAuto, bgColorCustom);
+    colorCustom.addEventListener("input", onInputCustom);
+
+    colorCustom.checked = false;
+    colorCustom.dispatchEvent(new InputEvent("input"));
+
+    initColorInput(color0, color1, colorAuto, true, 10, onColorInput);
 }
 
 /* Card (mostly) */
@@ -360,6 +264,13 @@ function initHandle() {
     var cardRect = card.getBoundingClientRect();
     var style = document.createElement("style");
 
+    function resizeCard() {
+        card.style.transform = "scale(" + m + ")";
+        card.style.marginRight = (m - 1) * 2500 + "px"; /* +20 for border */
+        card.style.marginBottom = (m - 1) * 1792 + "px"; /* +20 for border */
+        cardSize.innerHTML = Math.round(100 * m) + "%";
+    }
+
     function onHandleEnd(e) {
         style.remove();
         window.removeEventListener("mouseup", onHandleEnd);
@@ -372,11 +283,7 @@ function initHandle() {
         e = getMouse(e);
         var n = (e.x - cardRect.left - m * 15) / 2480; /* +m*15 for border */
         m = Math.max(0.2, Math.min(n, 0.5));
-
-        card.style.transform = "scale(" + m + ")";
-        card.style.marginRight = (m - 1) * 2500 + "px"; /* +20 for border */
-        card.style.marginBottom = (m - 1) * 1792 + "px"; /* +20 for border */
-        cardSize.innerHTML = Math.round(100 * m) + "%";
+        resizeCard();
     }
 
     function onHandleStart(e) {
@@ -391,6 +298,8 @@ function initHandle() {
 
     handle.addEventListener("mousedown", onHandleStart);
     handle.addEventListener("touchstart", onHandleStart);
+    window.addEventListener("resize", resizeCard);
+    resizeCard();
 }
 
 function getScaledMouse(e) {
@@ -720,13 +629,13 @@ function initRenderer() {
 
         var id = getDataID(code);
 
-        var subcanvas = newCanvas(rq * cardImageSize[code].width, rq * cardImageSize[code].height);
+        var subcanvas = newCanvas(rq * gemImageSize.width, rq * gemImageSize.height);
         var subcontext = subcanvas.getContext("2d");
-        subcontext.drawImage(cardImage[id], 0, 0, subcanvas.width, subcanvas.height);
+        subcontext.drawImage(gemImage, 0, 0, subcanvas.width, subcanvas.height);
 
         if (colorCustom.checked) {
             var subdata = subcontext.getImageData(0, 0, subcanvas.width, subcanvas.height);
-            var dyed = applyGradient(subdata, cardGradientData[code]);
+            var dyed = applyGradient(subdata, gemGradientData);
             subcontext.putImageData(dyed, 0, 0);
         }
 
@@ -929,8 +838,7 @@ function init() {
     card = document.getElementById("card");
     art = document.getElementById("card-art");
 
-    // initRecolorers();
-    // initName();
+    initGemRecolorer();
     initHandle();
     initArt();
     initInfo();
