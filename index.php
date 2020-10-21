@@ -9,7 +9,8 @@
 </head>
 <body>
     <div id="card">
-        <div id="card-bg"></div>
+        <!-- <div id="card-bg"></div> -->
+        <img id="card-back" src="img/back.png">
 
         <img id="card-frame-left" src="img/leftFrame.png">
         <div id="card-hero-controller">
@@ -87,7 +88,7 @@
                 </div>
             </div>
             <div class="centered">
-                <img src="img/contentsDivider.png">
+                <img id="contents-divider" src="img/contentsDivider.png">
             </div>
             <div class="centered">
                 <span>MEMORIE</span>
@@ -194,7 +195,7 @@
         </div>
 
         <div id="loading" class="hidden">LOADING</div>
-        <canvas id="card-canvas" class="hidden"></canvas>
+        <canvas id="card-canvas" class=""></canvas>
         <img id="card-render">
     </div>
 </body>

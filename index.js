@@ -1,10 +1,5 @@
-var pq = 0.75; /* preview quality */
-var rq = 2; /* render quality */
+var card, gemImage, gemGradientData, gemImageData, renderCard;
 var m = 0.45; /* magnification */
-
-var card;
-var gemImage, gemGradientData, gemImageData;
-var renderCard;
 
 /* General Functions */
 
@@ -93,7 +88,7 @@ function initColorInput(color0, color1, colorAuto, colorAutoChecked, depth, upda
 function matchFont(element, context) {
     var style = getComputedStyle(element);
     var fontSize = style.fontSize.match(/(\d+(?:\.\d+)?)(\w+)/);
-    context.font = rq * fontSize[1] + fontSize[2] + " " + style.fontFamily;
+    context.font = fontSize[1] + fontSize[2] + " " + style.fontFamily;
     context.fillStyle = style.color;
     context.textAlign = style.textAlign;
     context.textBaseline = "middle";
@@ -663,32 +658,17 @@ function initRenderer() {
     var infobox = document.getElementById("card-info");
     var bubbles = infobox.getElementsByClassName("bubble");
     var inputs = infobox.getElementsByTagName("input");
-    var icons = infobox.getElementsByTagName("img");
 
     var canvas = document.getElementById("card-canvas");
     var context = canvas.getContext("2d");
     var loading = document.getElementById("loading");
 
-    function renderImage(img, element) {
-        var style = getComputedStyle(element);
-        context.drawImage(
-            img,
-            rq * parseFloat(style.left),
-            rq * parseFloat(style.top),
-            rq * parseFloat(style.width),
-            rq * parseFloat(style.height)
-        );
-    }
-
-    function renderBG(code, element) {
-        var colorCustom = document.getElementById(code + "-color-custom");
-
-        var id = getDataID(code);
-
-        var subcanvas = newCanvas(rq * gemImageSize.width, rq * gemImageSize.height);
+    function renderGem() {
+        var subcanvas = newCanvas(gemImage.width, gemImage.height);
         var subcontext = subcanvas.getContext("2d");
         subcontext.drawImage(gemImage, 0, 0, subcanvas.width, subcanvas.height);
 
+        var colorCustom = document.getElementById("gem-color-custom");
         if (colorCustom.checked) {
             var subdata = subcontext.getImageData(0, 0, subcanvas.width, subcanvas.height);
             var dyed = applyGradient(subdata, gemGradientData);
@@ -696,6 +676,17 @@ function initRenderer() {
         }
 
         return newImage(subcanvas.toDataURL());
+    }
+
+    function renderImage(img, element) {
+        var style = getComputedStyle(element ? element : img);
+        context.drawImage(
+            img,
+            parseFloat(style.left),
+            parseFloat(style.top),
+            parseFloat(style.width),
+            parseFloat(style.height)
+        );
     }
 
     function renderArt() {
@@ -709,14 +700,14 @@ function initRenderer() {
         var b = parseFloat(matrix[1]);
         var c = parseFloat(matrix[2]);
         var d = parseFloat(matrix[3]);
-        var e = rq * parseFloat(matrix[4]);
-        var f = rq * parseFloat(matrix[5]);
+        var e = parseFloat(matrix[4]);
+        var f = parseFloat(matrix[5]);
         var origin = style.transformOrigin.match(pattern) || [
             parseFloat(style.width) / 2,
             parseFloat(style.height) / 2
         ];
-        var x0 = rq * (parseFloat(style.left) + parseFloat(origin[0]));
-        var y0 = rq * (parseFloat(style.top) + parseFloat(origin[1]));
+        var x0 = (parseFloat(style.left) + parseFloat(origin[0]));
+        var y0 = (parseFloat(style.top) + parseFloat(origin[1]));
 
         context.save();
         if (style.imageRendering == "pixelated" || style.imageRendering == "crisp-edges") {
@@ -736,8 +727,8 @@ function initRenderer() {
 
         var style = getComputedStyle(cardName);
         var lg = context.createLinearGradient(
-            0, rq * parseFloat(style.top),
-            0, rq * (parseFloat(style.top) + parseFloat(style.height))
+            0, parseFloat(style.top),
+            0, parseFloat(style.top) + parseFloat(style.height)
         );
 
         context.save();
@@ -747,8 +738,8 @@ function initRenderer() {
         context.fillStyle = lg;
         context.fillText(
             cardName.value,
-            rq * (parseFloat(style.left) + parseFloat(style.width) / 2),
-            rq * (parseFloat(style.top) + parseFloat(style.height) / 2)
+            parseFloat(style.left) + parseFloat(style.width) / 2,
+            parseFloat(style.top) + parseFloat(style.height) / 2
         );
         context.restore();
     }
@@ -758,12 +749,12 @@ function initRenderer() {
         var rect = getScaledRect(element);
 
         context.save();
-        context.lineWidth = rq * 2;
+        context.lineWidth = 2;
         context.beginPath();
         context.arc(
-            rq * (rect.left + rect.width / 2 - cardRect.left - 10),
-            rq * (rect.top + rect.height / 2 - cardRect.top - 10),
-            rq * (rect.width / 2 - 3),
+            rect.left + rect.width / 2 - cardRect.left - 10,
+            rect.top + rect.height / 2 - cardRect.top - 10,
+            rect.width / 2 - 3,
             0,
             2 * Math.PI
         );
@@ -782,8 +773,8 @@ function initRenderer() {
         matchFont(element, context);
         context.fillText(
             element.value,
-            rq * (rect.left - cardRect.left - 10),
-            rq * (rect.top + rect.height / 2 - cardRect.top - 10)
+            rect.left - cardRect.left - 10,
+            rect.top + rect.height / 2 - cardRect.top - 10
         );
         context.restore();
     }
@@ -794,28 +785,33 @@ function initRenderer() {
 
         context.drawImage(
             img,
-            rq * (rect.left - cardRect.left - 10),
-            rq * (rect.top - cardRect.top - 10),
-            rq * rect.width,
-            rq * rect.height
+            rect.left - cardRect.left - 10,
+            rect.top - cardRect.top - 10,
+            rect.width,
+            rect.height
         );
     }
 
     renderCard = function () {
         loading.classList.remove("hidden");
 
-        canvas.width = rq * 756;
-        canvas.height = rq * 1134;
+        canvas.width = 2480;
+        canvas.height = 1772;
 
-        return Promise.all([
-            renderBG("bg"),
-            renderBG("np"),
-            renderBG("ib")
-        ]).then(function (imgs) {
-            renderImage(imgs[0], document.getElementById("card-bg"));
-            renderArt();
-            renderImage(imgs[1], document.getElementById("card-name-bg"));
-            renderImage(imgs[2], document.getElementById("card-info-bg"));
+        return renderGem().then(function (gem) {
+            // context.fillStyle = getComputedStyle(document.getElementById("card-bg")).backgroundColor;
+            // context.fillRect(0, 0, canvas.width, canvas.height);
+            renderImage(document.getElementById("card-back"));
+            renderImage(document.getElementById("card-frame-left"));
+            // renderArt("hero");
+            renderImage(document.getElementById("card-setting"));
+            renderImage(gem, document.getElementById("card-gem"));
+            // renderArt("icon");
+            renderImage(document.getElementById("card-page"));
+            renderImage(document.getElementById("card-frame-right"));
+            renderImage(document.getElementById("card-logo"));
+            renderImage(document.getElementById("contents-divider"));
+
             renderName();
 
             for (var i = 0; i < bubbles.length; i++) {
@@ -825,9 +821,6 @@ function initRenderer() {
                 if (inputs[i].type == "text") {
                     renderText(inputs[i]);
                 }
-            }
-            for (var i = 0; i < icons.length; i++) {
-                renderIcon(icons[i]);
             }
 
             loading.classList.add("hidden");
@@ -850,7 +843,7 @@ function initExport() {
             renderPNG.src = url;
             var a = document.createElement("a");
             a.href = url;
-            a.setAttribute("download", "ehrpg_" + getTimestamp() + ".png");
+            a.setAttribute("download", "embers-horizon-" + getTimestamp() + ".png");
             a.click();
         });
     }
@@ -858,21 +851,10 @@ function initExport() {
     initRenderer();
 
     exportPNG.addEventListener("click", createPNG);
-    window.addEventListener("beforeprint", createPrint);
 }
 
 function init() {
-    var pqMatch = location.search.match(/[\?&]pq=(\d+(?:\.\d+)?)/);
-    var rqMatch = location.search.match(/[\?&]rq=(\d+(?:\.\d+)?)/);
-    if (pqMatch) {
-        pq = Math.max(0.0625, Math.min(parseFloat(pqMatch[1]), 1));
-    }
-    if (rqMatch) {
-        rq = Math.max(1, Math.min(parseFloat(rqMatch[1]), 4));
-    }
-
     card = document.getElementById("card");
-
     initGemRecolorer();
     initHandle();
     initArts();
