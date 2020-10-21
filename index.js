@@ -655,10 +655,6 @@ function initStats() {
 /* Exporting */
 
 function initRenderer() {
-    var infobox = document.getElementById("card-info");
-    var bubbles = infobox.getElementsByClassName("bubble");
-    var inputs = infobox.getElementsByTagName("input");
-
     var canvas = document.getElementById("card-canvas");
     var context = canvas.getContext("2d");
     var loading = document.getElementById("loading");
@@ -689,7 +685,7 @@ function initRenderer() {
         );
     }
 
-    function renderArt() {
+    function renderArt(art) {
         var pattern = /-?\d+(\.\d+)?(e-?\d+)?(px|%)?/g;
         var style = getComputedStyle(art);
         var matrix = style.transform.match(pattern) || [
@@ -716,31 +712,94 @@ function initRenderer() {
         context.translate(x0, y0);
         context.transform(a, b, c, d, e, f);
         context.translate(-x0, -y0);
-        renderImage(art, art);
+        renderImage(art);
         context.restore();
     }
 
-    function renderName() {
-        var cardName = document.getElementById("card-name");
-        var color0 = document.getElementById("name-color-0");
-        var color1 = document.getElementById("name-color-1");
+    function renderInfoImage(img) {
+        var cardRect = getScaledRect(card);
+        var rect = getScaledRect(img);
 
-        var style = getComputedStyle(cardName);
-        var lg = context.createLinearGradient(
-            0, parseFloat(style.top),
-            0, parseFloat(style.top) + parseFloat(style.height)
+        context.drawImage(
+            img,
+            rect.left - cardRect.left - 10,
+            rect.top - cardRect.top - 10,
+            rect.width,
+            rect.height
         );
+    }
+
+    function renderSqubble(element) {
+        var cardRect = getScaledRect(card);
+        var rect = getScaledRect(element);
 
         context.save();
-        matchFont(cardName, context);
-        lg.addColorStop(0, color0.value);
-        lg.addColorStop(1, color1.value);
-        context.fillStyle = lg;
-        context.fillText(
-            cardName.value,
-            parseFloat(style.left) + parseFloat(style.width) / 2,
-            parseFloat(style.top) + parseFloat(style.height) / 2
+        context.lineWidth = 4;
+        context.beginPath();
+        context.moveTo(
+            rect.left + 12 - cardRect.left - 10,
+            rect.top - cardRect.top - 10
         );
+        context.lineTo(
+            rect.left + rect.width - 12 - cardRect.left - 10,
+            rect.top - cardRect.top - 10
+        );
+        context.arc(
+            rect.left + rect.width - 12 - cardRect.left - 10,
+            rect.top + 12 - cardRect.top - 10,
+            12,
+            Math.PI * 3 / 2,
+            0
+        );
+
+        context.moveTo(
+            rect.left + rect.width - cardRect.left - 10,
+            rect.top + 12 - cardRect.top - 10
+        );
+        context.lineTo(
+            rect.left + rect.width - cardRect.left - 10,
+            rect.top + rect.height - 12 - cardRect.top - 10
+        );
+        context.arc(
+            rect.left + rect.width - 12 - cardRect.left - 10,
+            rect.top + rect.height - 12 - cardRect.top - 10,
+            12,
+            0,
+            Math.PI / 2
+        );
+
+        context.moveTo(
+            rect.left + rect.width - 12 - cardRect.left - 10,
+            rect.top + rect.height - cardRect.top - 10
+        );
+        context.lineTo(
+            rect.left + 12 - cardRect.left - 10,
+            rect.top + rect.height - cardRect.top - 10
+        );
+        context.arc(
+            rect.left + 12 - cardRect.left - 10,
+            rect.top + rect.height - 12 - cardRect.top - 10,
+            12,
+            Math.PI / 2,
+            Math.PI
+        );
+
+        context.moveTo(
+            rect.left - cardRect.left - 10,
+            rect.top + rect.height - 12 - cardRect.top - 10
+        );
+        context.lineTo(
+            rect.left - cardRect.left - 10,
+            rect.top + 12 - cardRect.top - 10
+        );
+        context.arc(
+            rect.left + 12 - cardRect.left - 10,
+            rect.top + 12 - cardRect.top - 10,
+            12,
+            Math.PI,
+            Math.PI * 3 / 2
+        );
+        context.stroke();
         context.restore();
     }
 
@@ -749,12 +808,12 @@ function initRenderer() {
         var rect = getScaledRect(element);
 
         context.save();
-        context.lineWidth = 2;
+        context.lineWidth = 4;
         context.beginPath();
         context.arc(
             rect.left + rect.width / 2 - cardRect.left - 10,
             rect.top + rect.height / 2 - cardRect.top - 10,
-            rect.width / 2 - 3,
+            rect.width / 2 - 2,
             0,
             2 * Math.PI
         );
@@ -763,6 +822,23 @@ function initRenderer() {
         }
         context.stroke();
         context.restore();
+    }
+
+    function renderSpans(element) {
+        var cardRect = getScaledRect(card);
+        var rect = getScaledRect(element);
+
+        context.save();
+        matchFont(element, context);
+        context.fillText(
+            element.innerHTML,
+            rect.left - cardRect.left - 10,
+            rect.top + rect.height / 2 - cardRect.top - 10
+        );
+        context.restore();
+    }
+
+    function renderLine() {
     }
 
     function renderText(element) {
@@ -779,17 +855,28 @@ function initRenderer() {
         context.restore();
     }
 
-    function renderIcon(img) {
-        var cardRect = getScaledRect(card);
-        var rect = getScaledRect(img);
+    function renderInfo() {
+        var infobox = document.getElementById("card-info");
+        var squbbles = infobox.getElementsByClassName("squbble");
+        var bubbles = infobox.getElementsByClassName("bubble");
+        var spans = infobox.getElementsByClassName("span");
+        var inputs = infobox.getElementsByTagName("input");
 
-        context.drawImage(
-            img,
-            rect.left - cardRect.left - 10,
-            rect.top - cardRect.top - 10,
-            rect.width,
-            rect.height
-        );
+        renderInfoImage(document.getElementById("contents-divider"));
+        for (var i = 0; i < squbbles.length; i++) {
+            renderSqubble(squbbles[i]);
+        }
+        for (var i = 0; i < bubbles.length; i++) {
+            renderBubble(bubbles[i]);
+        }
+        for (var i = 0; i < spans.length; i++) {
+            renderSpan(spans[i]);
+        }
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].type == "text") {
+                renderText(inputs[i]);
+            }
+        }
     }
 
     renderCard = function () {
@@ -799,29 +886,16 @@ function initRenderer() {
         canvas.height = 1772;
 
         return renderGem().then(function (gem) {
-            // context.fillStyle = getComputedStyle(document.getElementById("card-bg")).backgroundColor;
-            // context.fillRect(0, 0, canvas.width, canvas.height);
             renderImage(document.getElementById("card-back"));
             renderImage(document.getElementById("card-frame-left"));
-            // renderArt("hero");
+            renderArt(document.getElementById("card-hero"));
             renderImage(document.getElementById("card-setting"));
             renderImage(gem, document.getElementById("card-gem"));
-            // renderArt("icon");
+            renderArt(document.getElementById("card-icon"));
             renderImage(document.getElementById("card-page"));
             renderImage(document.getElementById("card-frame-right"));
             renderImage(document.getElementById("card-logo"));
-            renderImage(document.getElementById("contents-divider"));
-
-            renderName();
-
-            for (var i = 0; i < bubbles.length; i++) {
-                renderBubble(bubbles[i]);
-            }
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].type == "text") {
-                    renderText(inputs[i]);
-                }
-            }
+            renderInfo();
 
             loading.classList.add("hidden");
 

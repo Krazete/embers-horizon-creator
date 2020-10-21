@@ -9,7 +9,6 @@
 </head>
 <body>
     <div id="card">
-        <!-- <div id="card-bg"></div> -->
         <img id="card-back" src="img/back.png">
 
         <img id="card-frame-left" src="img/leftFrame.png">
@@ -195,7 +194,7 @@
         </div>
 
         <div id="loading" class="hidden">LOADING</div>
-        <canvas id="card-canvas" class=""></canvas>
+        <canvas id="card-canvas" class="hidden"></canvas>
         <img id="card-render">
     </div>
 </body>
