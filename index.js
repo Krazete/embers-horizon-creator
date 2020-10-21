@@ -560,7 +560,7 @@ function initTexts() {
     }
 
     function sanitize() {
-        if (this.value.indexOf("\n")) {
+        if (this.value.indexOf("\n") >= 0) {
             this.value = this.value.replace(/\n/g, "");
         }
     }
@@ -587,8 +587,10 @@ function initTexts() {
         }
     }
     for (var i = 0; i < textareas.length; i++) {
+        textareas[i].addEventListener("focus", sanitize); /* revert autopad */
         textareas[i].addEventListener("input", sanitize);
         textareas[i].addEventListener("change", autopad);
+        textareas[i].addEventListener("blur", autopad); /* revert reversion of autopad */
         textareas[i].addEventListener("blur", autoscroll);
         textareas[i].addEventListener("scroll", autoscroll);
     }

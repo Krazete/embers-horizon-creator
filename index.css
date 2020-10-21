@@ -474,7 +474,7 @@ input[type='radio'], input[type='checkbox'], .hidden {
 		border: none;
 		border-radius: 0;
 	}
-	#card-size, #menu, .jscolor-picker-wrap {
+	#circle, #handle, #card-size, #menu, .jscolor-picker-wrap {
 		display: none;
 	}
 }
