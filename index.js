@@ -263,8 +263,10 @@ function initHandle() {
     var handle = document.getElementById("handle");
     var cardRect = card.getBoundingClientRect();
     var style = document.createElement("style");
+    var mMax = 0.5;
 
-    function resizeCard() {
+    function resizeCard(n) {
+        m = Math.max(0.2, Math.min(n, mMax));
         card.style.transform = "scale(" + m + ")";
         card.style.marginRight = (m - 1) * 2500 + "px"; /* +20 for border */
         card.style.marginBottom = (m - 1) * 1792 + "px"; /* +20 for border */
@@ -282,8 +284,7 @@ function initHandle() {
     function onHandle(e) {
         e = getMouse(e);
         var n = (e.x - cardRect.left - m * 15) / 2480; /* +m*15 for border */
-        m = Math.max(0.2, Math.min(n, 0.5));
-        resizeCard();
+        resizeCard(n);
     }
 
     function onHandleStart(e) {
@@ -294,12 +295,20 @@ function initHandle() {
         window.addEventListener("touchmove", onHandle);
     }
 
+    function onResize() {
+        var newmMax = Math.max(0.5, Math.min((innerWidth - 40) / 2480, 1));
+        if (mMax != newmMax) {
+            mMax = newmMax;
+            resizeCard(m);
+        }
+    }
+
     style.innerHTML = "html {cursor: ew-resize;} body {pointer-events: none;} #card-size {display: initial;}";
 
     handle.addEventListener("mousedown", onHandleStart);
     handle.addEventListener("touchstart", onHandleStart);
-    window.addEventListener("resize", resizeCard);
-    resizeCard();
+    window.addEventListener("resize", onResize);
+    onResize();
 }
 
 function getScaledMouse(e) {
