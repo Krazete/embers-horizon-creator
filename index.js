@@ -556,8 +556,9 @@ function initTexts() {
     }
 
     function sanitize() {
-        if (this.value.indexOf("\n") >= 0) {
+        if (this.value.match(/\n|\s\s/)) {
             this.value = this.value.replace(/\n/g, "");
+            this.value = this.value.replace(/\s+/g, " ");
         }
     }
 
@@ -565,7 +566,7 @@ function initTexts() {
         var rect = getScaledRect(this);
         var textSize = getTextMetrics(this);
         if (textSize.width < rect.width) {
-            this.value = "\n" + this.value;
+            this.value = "\n" + this.value.trim();
         }
     }
 
@@ -849,7 +850,7 @@ function initRenderer() {
         context.save();
         var style = matchFont(element, context);
         context.fillText(
-            element.tagName == "INPUT" || element.tagName == "TEXTAREA" ? element.value : element.innerHTML,
+            element.tagName == "INPUT" ? element.value : element.innerHTML,
             rect.left + rect.width * (
                 style.textAlign == "right" ? 1 : style.textAlign == "center" ? 0.5 : 0
             ) - cardRect.left - 10,
@@ -859,6 +860,17 @@ function initRenderer() {
     }
 
     function renderTextArea() {
+        var cardRect = getScaledRect(card);
+        var rect = getScaledRect(element);
+
+        context.save();
+        var style = matchFont(element, context);
+        context.fillText(
+            element.value,
+            rect.left - cardRect.left - 10,
+            rect.top + rect.height / 2 - cardRect.top - 10
+        );
+        context.restore();
     }
 
     function renderInfo() {
@@ -895,7 +907,7 @@ function initRenderer() {
             }
         }
         for (var i = 0; i < textareas.length; i++) {
-            renderText(textareas[i]);
+            renderTextArea(textareas[i]);
         }
         renderText(cardIllustratorSpan);
         renderText(cardIllustratorInput);
