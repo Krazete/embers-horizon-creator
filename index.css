@@ -88,44 +88,30 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	top: 72px;
 }
 
-#card-art-controller {
+#card-hero-controller {
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 2480px;
+	height: 1772px;
 	overflow: hidden;
 	cursor: move;
 }
-
-#card-art {
-	position: absolute;
-	width: 756px;
-	left: 378px;
-	top: 567px;
-	transform: translate(-50%, -50%);
-	pointer-events: none;
-}
-#card-art.pixel {
-	image-rendering: crisp-edges;
-	image-rendering: pixelated;
-}
-
 #card-icon-controller {
 	position: absolute;
-	width: 100%;
-	height: 100%;
+	width: 1008px;
+	height: 300px;
 	overflow: hidden;
 	cursor: move;
 }
 
-#card-icon {
+#card-hero, #card-icon {
 	position: absolute;
-	width: 756px;
-	left: 378px;
-	top: 567px;
+	width: 150px; /* unecessary; immediately overwritten */
+	left: 150px; /* unecessary; immediately overwritten */
+	top: 300px; /* unecessary; immediately overwritten */
 	transform: translate(-50%, -50%);
 	pointer-events: none;
 }
-#card-icon.pixel {
+#card-hero.pixel, #card-icon.pixel {
 	image-rendering: crisp-edges;
 	image-rendering: pixelated;
 }
@@ -155,13 +141,14 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	height: 1772px;
 	left: 1008px;
 	top: 0;
+	pointer-events: none;
 }
 
 #card-frame-right {
 	position: absolute;
-	width: 1472px;
+	width: 2320px;
 	height: 1772px;
-	left: 1008px;
+	left: 160px;
 	top: 0;
 	pointer-events: none;
 }
@@ -317,7 +304,23 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	width: 100px;
 }
 
-#tempo{position: absolute; width: 100%; height: 100%; left: 0; top: 0; opacity: 0.2; pointer-events: none;}
+@media (pointer: fine) {
+	#card-icon-controller:hover {
+		box-shadow: inset 0 0 100px black;
+	}
+	#card input[type='text']:hover {
+		outline: 1px dashed gray;
+	}
+	#card input[type='text']:focus {
+		outline: none;
+	}
+	#card .bubble.prospective:after {
+		box-shadow: inset 0 0 6px black;
+	}
+	#card .bubble.checked.prospective:after {
+		background: gray;
+	}
+}
 
 /* Card Resizer */
 

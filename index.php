@@ -15,11 +15,11 @@
             <img id="card-frame-left" src="img/leftFrame.png">
             <img id="card-setting" src="img/setting.png">
             <canvas id="card-gem" width="176" height="178"></canvas>
-            <div id="card-icon-controller">
-                <img id="card-icon">
-            </div>
             <div id="card-hero-controller">
                 <img id="card-hero">
+            </div>
+            <div id="card-icon-controller">
+                <img id="card-icon">
             </div>
 
             <img id="card-page" src="img/rightPage.png">
@@ -122,8 +122,6 @@
                 <input type="text" placeholder="Origine">
             </div>
 
-            <!-- <img id="tempo" src="img/areas.jpg"> -->
-
             <div id="handle"></div>
         </div>
 
@@ -150,18 +148,18 @@
             <div class="row">
                 <input id="icon-file" type="file" accept="image/*">
                 <input id="icon-pixel" type="checkbox">
-                <label for="icon-pixel">Pixel Art</label>
+                <label for="icon-pixel">Pixelated</label>
             </div>
             <div class="row">
                 <input id="icon-position" type="radio" name="icon-transform">
                 <label for="icon-position">Posizione</label>
-                X <input id="icon-x" class="jsscrub" type="number" value="378" step="2">
-                Y <input id="icon-y" class="jsscrub" type="number" value="567" step="2">
+                X <input id="icon-x" class="jsscrub" type="number" value="150" step="2">
+                Y <input id="icon-y" class="jsscrub" type="number" value="145" step="2">
             </div>
             <div class="row">
                 <input id="icon-width" type="radio" name="icon-transform">
                 <label for="icon-width">Larghezza</label>
-                <input id="icon-w" class="jsscrub" type="number" value="756" min="1" step="2"> px
+                <input id="icon-w" class="jsscrub" type="number" value="200" min="1" step="2"> px
             </div>
             <div class="row">
                 <input id="icon-angle" type="radio" name="icon-transform">
@@ -173,18 +171,18 @@
             <div class="row">
                 <input id="hero-file" type="file" accept="image/*">
                 <input id="hero-pixel" type="checkbox">
-                <label for="hero-pixel">Pixel Art</label>
+                <label for="hero-pixel">Pixelated</label>
             </div>
             <div class="row">
                 <input id="hero-position" type="radio" name="hero-transform">
                 <label for="hero-position">Posizione</label>
-                X <input id="hero-x" class="jsscrub" type="number" value="378" step="2">
-                Y <input id="hero-y" class="jsscrub" type="number" value="567" step="2">
+                X <input id="hero-x" class="jsscrub" type="number" value="566" step="2">
+                Y <input id="hero-y" class="jsscrub" type="number" value="886" step="2">
             </div>
             <div class="row">
                 <input id="hero-width" type="radio" name="hero-transform">
                 <label for="hero-width">Larghezza</label>
-                <input id="hero-w" class="jsscrub" type="number" value="756" min="1" step="2"> px
+                <input id="hero-w" class="jsscrub" type="number" value="1132" min="1" step="2"> px
             </div>
             <div class="row">
                 <input id="hero-angle" type="radio" name="hero-transform">

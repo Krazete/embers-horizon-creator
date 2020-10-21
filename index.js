@@ -2,7 +2,7 @@ var pq = 0.75; /* preview quality */
 var rq = 2; /* render quality */
 var m = 0.45; /* magnification */
 
-var card, art;
+var card;
 var gemImage, gemGradientData, gemImageData;
 var renderCard;
 
@@ -328,19 +328,20 @@ function getScaledRect(element) {
     return scaled;
 }
 
-function initArt() {
-    var artController = document.getElementById("card-art-controller");
+function initArt(code) {
+    var artController = document.getElementById("card-" + code + "-controller");
+    var art = document.getElementById("card-" + code);
     var circle = document.createElement("div");
     var style = document.createElement("style");
-    var artFile = document.getElementById("art-file");
-    var artPixel = document.getElementById("art-pixel");
-    var artPosition = document.getElementById("art-position");
-    var artWidth = document.getElementById("art-width");
-    var artAngle = document.getElementById("art-angle");
-    var artX = document.getElementById("art-x");
-    var artY = document.getElementById("art-y");
-    var artW = document.getElementById("art-w");
-    var artA = document.getElementById("art-a");
+    var artFile = document.getElementById(code + "-file");
+    var artPixel = document.getElementById(code + "-pixel");
+    var artPosition = document.getElementById(code + "-position");
+    var artWidth = document.getElementById(code + "-width");
+    var artAngle = document.getElementById(code + "-angle");
+    var artX = document.getElementById(code + "-x");
+    var artY = document.getElementById(code + "-y");
+    var artW = document.getElementById(code + "-w");
+    var artA = document.getElementById(code + "-a");
     var mode, artRect0, artCenter, e0, x0, y0, w0, a0;
 
     function bound(input, n) {
@@ -383,7 +384,7 @@ function initArt() {
 
     function onInputArtY() {
         this.value = bound(this, this.value);
-        art.style.top = 1134 - this.value + "px";
+        art.style.top = artController.offsetHeight - this.value + "px";
     }
 
     function onInputArtW() {
@@ -442,7 +443,7 @@ function initArt() {
 
             artX.dispatchEvent(new InputEvent("input"));
             artY.dispatchEvent(new InputEvent("input"));
-            updateCircle(artX.value, 1134 - artY.value, 100);
+            updateCircle(artX.value, artController.offsetHeight - artY.value, 100);
         }
         else if (mode == "width") {
             var r0 = distance(artCenter, e0);
@@ -451,7 +452,7 @@ function initArt() {
             artW.value = Math.max(1, Math.round(w1));
 
             artW.dispatchEvent(new InputEvent("input"));
-            updateCircle(x0, 1134 - y0, r1);
+            updateCircle(x0, artController.offsetHeight - y0, r1);
         }
         else if (mode == "angle") {
             var t0 = angle(artCenter, e0);
@@ -464,7 +465,7 @@ function initArt() {
             artA.value = ((a0 + dt - min) % dm + dm) % dm + min;
 
             artA.dispatchEvent(new InputEvent("input"));
-            updateCircle(x0, 1134 - y0, 100, t1);
+            updateCircle(x0, artController.offsetHeight - y0, 100, t1);
         }
     }
 
@@ -485,7 +486,7 @@ function initArt() {
         };
         updateBounds();
 
-        updateCircle(x0, 1134 - y0, 0);
+        updateCircle(x0, artController.offsetHeight - y0, 0);
         artController.appendChild(circle);
         document.body.appendChild(style);
         window.addEventListener("mouseup", onControlEnd);
@@ -521,6 +522,11 @@ function initArt() {
     artY.dispatchEvent(new InputEvent("input"));
     artW.dispatchEvent(new InputEvent("input"));
     artA.dispatchEvent(new InputEvent("input"));
+}
+
+function initArts() {
+    initArt("icon");
+    initArt("hero");
 }
 
 function initStats() {
@@ -845,11 +851,10 @@ function init() {
     }
 
     card = document.getElementById("card");
-    art = document.getElementById("card-art");
 
     initGemRecolorer();
     initHandle();
-    initArt();
+    initArts();
     initInfo();
     initExport();
 }
