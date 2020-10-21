@@ -92,6 +92,7 @@ function matchFont(element, context) {
     context.fillStyle = style.color;
     context.textAlign = style.textAlign;
     context.textBaseline = "middle";
+    return style;
 }
 
 function initFileInput(file, update) {
@@ -751,11 +752,6 @@ function initRenderer() {
             Math.PI * 3 / 2,
             0
         );
-
-        context.moveTo(
-            rect.left + rect.width - cardRect.left - 10,
-            rect.top + 12 - cardRect.top - 10
-        );
         context.lineTo(
             rect.left + rect.width - cardRect.left - 10,
             rect.top + rect.height - 12 - cardRect.top - 10
@@ -767,11 +763,6 @@ function initRenderer() {
             0,
             Math.PI / 2
         );
-
-        context.moveTo(
-            rect.left + rect.width - 12 - cardRect.left - 10,
-            rect.top + rect.height - cardRect.top - 10
-        );
         context.lineTo(
             rect.left + 12 - cardRect.left - 10,
             rect.top + rect.height - cardRect.top - 10
@@ -782,11 +773,6 @@ function initRenderer() {
             12,
             Math.PI / 2,
             Math.PI
-        );
-
-        context.moveTo(
-            rect.left - cardRect.left - 10,
-            rect.top + rect.height - 12 - cardRect.top - 10
         );
         context.lineTo(
             rect.left - cardRect.left - 10,
@@ -824,21 +810,23 @@ function initRenderer() {
         context.restore();
     }
 
-    function renderSpans(element) {
+    function renderUnderline(element) {
         var cardRect = getScaledRect(card);
         var rect = getScaledRect(element);
 
         context.save();
-        matchFont(element, context);
-        context.fillText(
-            element.innerHTML,
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(
             rect.left - cardRect.left - 10,
-            rect.top + rect.height / 2 - cardRect.top - 10
+            rect.top + rect.height - 30 - cardRect.top - 10
         );
+        context.lineTo(
+            rect.left + rect.width - cardRect.left - 10,
+            rect.top + rect.height - 30 - cardRect.top - 10
+        );
+        context.stroke();
         context.restore();
-    }
-
-    function renderLine() {
     }
 
     function renderText(element) {
@@ -846,21 +834,34 @@ function initRenderer() {
         var rect = getScaledRect(element);
 
         context.save();
-        matchFont(element, context);
+        var style = matchFont(element, context);
         context.fillText(
-            element.value,
-            rect.left - cardRect.left - 10,
+            element.tagName == "INPUT" ? element.value : element.innerHTML,
+            rect.left + rect.width * (
+                style.textAlign == "right" ? 1 : style.textAlign == "center" ? 0.5 : 0
+            ) - cardRect.left - 10,
             rect.top + rect.height / 2 - cardRect.top - 10
         );
         context.restore();
+    }
+
+    function renderTextArea() {
     }
 
     function renderInfo() {
         var infobox = document.getElementById("card-info");
         var squbbles = infobox.getElementsByClassName("squbble");
         var bubbles = infobox.getElementsByClassName("bubble");
-        var spans = infobox.getElementsByClassName("span");
+        var lines = infobox.getElementsByClassName("underlined");
+        var spans = infobox.getElementsByTagName("span");
         var inputs = infobox.getElementsByTagName("input");
+        var textareas = infobox.getElementsByTagName("textarea");
+        var cardIllustrator = document.getElementById("card-illustrator");
+        var cardIllustratorSpan = cardIllustrator.getElementsByTagName("span")[0];
+        var cardIllustratorInput = document.getElementById("card-illustrator-input");
+        var cardOrigin = document.getElementById("card-origin");
+        var cardOriginSpan = cardOrigin.getElementsByTagName("span")[0];
+        var cardOriginInput = document.getElementById("card-origin-input");
 
         renderInfoImage(document.getElementById("contents-divider"));
         for (var i = 0; i < squbbles.length; i++) {
@@ -869,14 +870,24 @@ function initRenderer() {
         for (var i = 0; i < bubbles.length; i++) {
             renderBubble(bubbles[i]);
         }
+        for (var i = 0; i < lines.length; i++) {
+            renderUnderline(lines[i]);
+        }
         for (var i = 0; i < spans.length; i++) {
-            renderSpan(spans[i]);
+            renderText(spans[i]);
         }
         for (var i = 0; i < inputs.length; i++) {
             if (inputs[i].type == "text") {
                 renderText(inputs[i]);
             }
         }
+        for (var i = 0; i < textareas.length; i++) {
+            renderTextArea(textareas[i]);
+        }
+        renderText(cardIllustratorSpan);
+        renderText(cardIllustratorInput);
+        renderText(cardOriginSpan);
+        renderText(cardOriginInput);
     }
 
     renderCard = function () {
