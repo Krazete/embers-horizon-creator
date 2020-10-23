@@ -556,7 +556,7 @@ function initTexts() {
     }
 
     function sanitize() {
-        if (this.value.match(/\n|\s\s/)) {
+        if (this.value.search(/\n|\s\s/) >= 0) {
             this.value = this.value.replace(/\n/g, "");
             this.value = this.value.replace(/\s+/g, " ");
         }
@@ -859,17 +859,36 @@ function initRenderer() {
         context.restore();
     }
 
-    function renderTextArea() {
+    function renderTextArea(element) {
         var cardRect = getScaledRect(card);
         var rect = getScaledRect(element);
 
         context.save();
         var style = matchFont(element, context);
-        context.fillText(
-            element.value,
-            rect.left - cardRect.left - 10,
-            rect.top + rect.height / 2 - cardRect.top - 10
-        );
+
+        var substrings = [];
+        var value = element.value.trim();
+        for (var i = 0; i < value.length; i++) {
+            var subvalue = value.slice(i);
+            var textRuler = context.measureText(subvalue);
+            if (textRuler.width < rect.width) {
+                var k = 0;
+                if (i != 0 && value[i - 1].search(/\s/) < 0) {
+                    k = subvalue.search(/\s/);
+                }
+                substrings.push(value.slice(i + k).trim());
+                value = value.slice(0, i + k).trim();
+                i = -1;
+            }
+        }
+        for (var i = 0; i < Math.min(substrings.length, 2); i++) { /* maximum of 2 lines */
+            context.fillText(
+                substrings[i],
+                rect.left - cardRect.left - 10,
+                rect.top + rect.height / 2 + 28 - 50 * i - cardRect.top - 10
+            );
+        }
+
         context.restore();
     }
 
