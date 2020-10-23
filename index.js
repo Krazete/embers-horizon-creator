@@ -885,7 +885,7 @@ function initRenderer() {
             context.fillText(
                 substrings[i],
                 rect.left - cardRect.left - 10,
-                rect.top + rect.height / 2 + 28 - 50 * i - cardRect.top - 10
+                rect.top + rect.height / 2 + 25 - 50 * i - cardRect.top - 10
             );
         }
 
