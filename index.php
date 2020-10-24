@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="shortcut icon" href="img/gem.png">
     <link type="text/css" rel="stylesheet" href="index.css">
     <title>Embers Horizon Creator</title>
     <script type="text/javascript" src="script/jscolor.js"></script>
@@ -27,17 +28,17 @@
 
         <div id="card-info">
             <div>
-                <span>Nome Eroe</span>
+                <span>Nome Eroe:</span>
                 <div class="underlined">
                     <input id="nome-eroe" type="text">
                 </div>
-                <span>Giocatore</span>
+                <span>Giocatore:</span>
                 <div class="underlined">
                     <input id="giocatore" type="text" disabled>
                 </div>
             </div>
             <div id="archetipo">
-                <span>Archetipo</span>
+                <span>Archetipo:</span>
                 <div class="underlined">
                     <input type="text">
                 </div>
@@ -52,13 +53,13 @@
                 <div class="squbble"></div>
             </div>
             <div>
-                <span>Background</span>
+                <span>Background:</span>
                 <div class="underlined">
                     <input id="background" type="text">
                 </div>
             </div>
             <div id="mente-corpo-spirito">
-                <span>Mente</span>
+                <span>Mente:</span>
                 <div class="underlined">
                     <input type="text">
                 </div>
@@ -67,7 +68,7 @@
                     <div class="bubble"></div>
                     <div class="bubble"></div>
                 </div>
-                <span>Corpo</span>
+                <span>Corpo:</span>
                 <div class="underlined">
                     <input type="text">
                 </div>
@@ -76,7 +77,7 @@
                     <div class="bubble"></div>
                     <div class="bubble"></div>
                 </div>
-                <span>Spirito</span>
+                <span>Spirito:</span>
                 <div class="underlined">
                     <input type="text">
                 </div>
