@@ -35,6 +35,7 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	border-radius: 10px;
     margin-right: -1375px; /* redundancy */
     margin-bottom: -985.6px; /* redundancy */
+	overflow: hidden;
 	-ms-user-select: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
@@ -87,15 +88,16 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	position: absolute;
 	width: 2480px;
 	height: 1772px;
-	overflow: hidden;
 	cursor: move;
 }
 #card-icon-controller {
 	position: absolute;
 	width: 1008px;
-	height: 300px;
-	overflow: hidden;
+	height: 310px;
 	cursor: move;
+}
+#card-icon-controller.active {
+	box-shadow: inset 0 0 100px black;
 }
 
 #card-hero, #card-icon {
@@ -104,7 +106,6 @@ input[type='radio'], input[type='checkbox'], .hidden {
 	left: 150px; /* unecessary; immediately overwritten */
 	top: 300px; /* unecessary; immediately overwritten */
 	transform: translate(-50%, -50%);
-	pointer-events: none;
 }
 #card-hero.pixel, #card-icon.pixel {
 	image-rendering: crisp-edges;

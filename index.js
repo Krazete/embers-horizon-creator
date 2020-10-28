@@ -420,6 +420,7 @@ function initArt(code) {
     }
 
     function onControlEnd(e) {
+        artController.classList.remove("active");
         circle.removeAttribute("style");
         circle.remove();
         style.remove();
@@ -483,6 +484,7 @@ function initArt(code) {
         updateBounds();
 
         updateCircle(x0, artController.offsetHeight - y0, 0);
+        artController.classList.add("active");
         artController.appendChild(circle);
         document.body.appendChild(style);
         window.addEventListener("mouseup", onControlEnd);
