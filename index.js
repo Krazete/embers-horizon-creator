@@ -1001,4 +1001,4 @@ function warn(e) {
 }
 
 window.addEventListener("load", init);
-// window.addEventListener("beforeunload", warn);
+window.addEventListener("beforeunload", warn);
